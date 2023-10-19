@@ -5,6 +5,7 @@ import { commonStyles } from '../styles/styles.js';
 import constants from '../constants/img.js';
 import {LinearGradient} from "expo-linear-gradient";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import {AsyncStorage} from 'react-native';
 
 export default function LogIn({navigation}) {
     const [username, setUsername] = useState('');

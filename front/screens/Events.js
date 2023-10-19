@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
-import {View, TouchableOpacity, Text, ScrollView, Image} from 'react-native';
+import {View, ImageBackground, TouchableOpacity, Text, ScrollView, Image} from 'react-native';
 import { commonStyles } from '../styles/styles.js';
 import {LinearGradient} from "expo-linear-gradient";
 import {COLORS} from "../constants/theme";
 import EventsItem from "../components/EventsItem";
 import constants from "../constants/img";
 import ModalWindow from "../components/ModalAddEventScreen";
+import TabButton from "../components/TabButton";
 
 export default function Events({navigation}) {
-    const [activeTab, setActiveTab] = useState('Upcoming');
     const [isModalVisible, setModalVisible] = useState(false);
     const openModal = () => {
         setModalVisible(true);
@@ -19,75 +19,51 @@ export default function Events({navigation}) {
     };
 
     const handleSubmit = () => {
-        // Tutaj możesz obsłużyć logikę po naciśnięciu przycisku "Submit" w modalnym oknie
-        // Na przykład, możesz wykonać zapis danych i zamknąć modal.
+        //
         closeModal();
     };
 
-    const TabButton = ({label, tabName}) => {
-        const isActive = activeTab === tabName;
-        return(
-            <TouchableOpacity onPress={() => setActiveTab(tabName)}>
-                <Text style={[commonStyles.text,
-                    {
-                        color: isActive ? COLORS.red : COLORS.beaver,
-                        fontSize: 24,
-                    },
-                ]}> {label}
-                </Text>
-            </TouchableOpacity>
-        )
-    }
 
     return (
-        <View style={commonStyles.viewBackground}>
+        <ImageBackground source={constants.gradientEvents} style={commonStyles.imageBackground}>
             <View style={commonStyles.eventsTop}>
                 <Text style={[commonStyles.text, {color: COLORS.orange, fontSize:28}]}>I was invited:</Text>
-                <View style={commonStyles.horizontal}>
-                    <TabButton label="Upcoming" tabName="Upcoming"></TabButton>
-                    <Text style={[commonStyles.text, {color: COLORS.red, fontSize:24}]}>|</Text>
-                    <TabButton label="   Past    " tabName="Past"></TabButton>
-            </View>
+                <TabButton></TabButton>
             </View>
             <View style={commonStyles.eventsMiddle}>
-                <Image source={constants.picture}></Image>
-                <Text style={[commonStyles.text, {color: COLORS.grey}]}>No events yet</Text>
-                {/*<ScrollView>*/}
-                {/*    <EventsItem*/}
-                {/*        backgroundColor={COLORS.green}*/}
-                {/*        textColor={COLORS.white}*/}
-                {/*        name={"Charlotte’s birthday party"}*/}
-                {/*        date={"29.07.2023"}*/}
-                {/*    ></EventsItem>*/}
+                {/*<Image source={constants.picture}></Image>*/}
+                {/*<Text style={[commonStyles.text, {color: COLORS.grey}]}>No events yet</Text>*/}
+                <ScrollView>
+                    <EventsItem
+                        backgroundColor={COLORS.redcoral}
+                        name={"Charlotte’s birthday party"}
+                        date={"29.07.2023"}
+                    ></EventsItem>
 
-                {/*    <EventsItem*/}
-                {/*        backgroundColor={COLORS.orange}*/}
-                {/*        textColor={COLORS.white}*/}
-                {/*        name={"Gender Reveal Party"}*/}
-                {/*        date={"15.08.2023"}*/}
-                {/*    ></EventsItem>*/}
+                    <EventsItem
+                        backgroundColor={COLORS.orange}
+                        name={"Gender Reveal Party"}
+                        date={"15.08.2023"}
+                    ></EventsItem>
 
-                {/*    <EventsItem*/}
-                {/*        backgroundColor={COLORS.pink}*/}
-                {/*        textColor={COLORS.white}*/}
-                {/*        name={"Corporate event"}*/}
-                {/*        date={"09.10.2023"}*/}
-                {/*    ></EventsItem>*/}
+                    <EventsItem
+                        backgroundColor={COLORS.pink}
+                        name={"Corporate event"}
+                        date={"09.10.2023"}
+                    ></EventsItem>
 
-                {/*    <EventsItem*/}
-                {/*        backgroundColor={COLORS.red}*/}
-                {/*        textColor={COLORS.white}*/}
-                {/*        name={"Emily and Sam's Wedding"}*/}
-                {/*        date={"05.05.2024"}*/}
-                {/*    ></EventsItem>*/}
+                    <EventsItem
+                        backgroundColor={COLORS.red}
+                        name={"Emily and Sam's Wedding"}
+                        date={"05.05.2024"}
+                    ></EventsItem>
 
-                {/*    <EventsItem*/}
-                {/*        backgroundColor={COLORS.green}*/}
-                {/*        textColor={COLORS.white}*/}
-                {/*        name={"Charlotte’s birthday party"}*/}
-                {/*        date={"29.07.2023"}*/}
-                {/*    ></EventsItem>*/}
-                {/*</ScrollView>*/}
+                    <EventsItem
+                        backgroundColor={COLORS.redcoral}
+                        name={"Charlotte’s birthday party"}
+                        date={"29.07.2023"}
+                    ></EventsItem>
+                </ScrollView>
                 <ModalWindow
                     isVisible={isModalVisible}
                     onClose={closeModal}
@@ -109,6 +85,6 @@ export default function Events({navigation}) {
                     </LinearGradient>
                 </View>
             </View>
-        </View>
+        </ImageBackground>
     );
 }

@@ -5,8 +5,6 @@ import constants from '../constants/img.js';
 import {faUserAstronaut} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {COLORS} from "../constants/theme";
-import {useNavigation} from "@react-navigation/native";
-
 
 export default function Profile({navigation}) {
     return (
@@ -20,7 +18,7 @@ export default function Profile({navigation}) {
             <View style={commonStyles.profileBottom}>
                 <View style={[commonStyles.buttonProfile, commonStyles.buttonProfileLogOut]}>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('LogIn')}
+                         // onPress={() => ()}
                     >
                         <Text style={[commonStyles.text, {fontSize:16,color:COLORS.greendark}]}>Log out</Text>
                     </TouchableOpacity>

@@ -107,7 +107,7 @@ export const commonStyles = StyleSheet.create({
     buttonProfile:{
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: COLORS.white,
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
         height: 110,
         width: 170,
         bottom: 5,
@@ -222,5 +222,9 @@ export const commonStyles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'stretch',
+    },
+    blur:{
+        height: '100%',
+        width: '100%',
     },
 });

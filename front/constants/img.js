@@ -2,6 +2,8 @@ import gradient from "../assets/img/gradient.jpg";
 import gradientLight from "../assets/img/gradientLight.png";
 import gradientProfile from "../assets/img/gradientProfile.png";
 import gradientProfileLight from "../assets/img/gradientProfileLight.png";
+import gradientEvents from "../assets/img/gradientEvents.png";
+import gradientMyEvents from "../assets/img/gradientMyEvents.png";
 import logo from "../assets/img/logo3.png";
 import arrow from "../assets/img/arrow.png";
 import star1 from "../assets/img/first/star1.png";
@@ -18,6 +20,10 @@ import picture from "../assets/img/picture.png";
 export default {
     gradient,
     gradientLight,
+    gradientProfile,
+    gradientProfileLight,
+    gradientEvents,
+    gradientMyEvents,
     logo,
     arrow,
     star1,
@@ -30,6 +36,4 @@ export default {
     cake1,
     cake2,
     picture,
-    gradientProfile,
-    gradientProfileLight,
 };
