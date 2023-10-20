@@ -2,10 +2,16 @@
   "name": "serwer",
   "version": "1.0.0",
   "description": "Backend for mobile app",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node src/app.js"
   },
   "author": "Kateryna Naumenko",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
 }
