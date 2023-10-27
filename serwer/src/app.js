@@ -19,9 +19,9 @@ connection.connect((err) => {
     }
 });
 
-app.use('/api/userRoute', userRoutes);
-app.use('/api/eventRoute', eventRoutes);
-app.use('/api/guestRoute', guestRoute);
+app.use('/userRoute', userRoutes);
+app.use('/eventRoute', eventRoutes);
+app.use('/guestRoute', guestRoute);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

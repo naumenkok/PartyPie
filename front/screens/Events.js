@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, ImageBackground, TouchableOpacity, Text, ScrollView, Image} from 'react-native';
 import { commonStyles } from '../styles/styles.js';
 import {LinearGradient} from "expo-linear-gradient";
@@ -7,9 +7,29 @@ import EventsItem from "../components/EventsItem";
 import constants from "../constants/img";
 import ModalWindow from "../components/ModalAddEventScreen";
 import TabButton from "../components/TabButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {getFutureEvents, getPastEvents} from "../services/api";
 
 export default function Events({navigation}) {
+    const [activeTab, setActiveTab] = useState("Upcoming");
     const [isModalVisible, setModalVisible] = useState(false);
+    const [events, setEvents] = useState([]);
+    const eventColors = [COLORS.redcoral, COLORS.orange, COLORS.pink, COLORS.red, COLORS.redcoral];
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const userId = await AsyncStorage.getItem('userId');
+                const events =  activeTab==="Upcoming"? await getFutureEvents(userId):await getPastEvents(userId);
+                setEvents(events);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchData();
+        const intervalId = setInterval(fetchData, 2000);
+        return () => clearInterval(intervalId);
+    }, [activeTab]);
     const openModal = () => {
         setModalVisible(true);
     };
@@ -28,42 +48,31 @@ export default function Events({navigation}) {
         <ImageBackground source={constants.gradientEvents} style={commonStyles.imageBackground}>
             <View style={commonStyles.eventsTop}>
                 <Text style={[commonStyles.text, {color: COLORS.orange, fontSize:28}]}>I was invited:</Text>
-                <TabButton></TabButton>
+                <View style={commonStyles.horizontal}>
+                    <TabButton label="Upcoming" tabName="Upcoming"
+                               activeTab={activeTab} setActiveTab={setActiveTab}/>
+                    <Text style={[commonStyles.text, { color: COLORS.red, fontSize: 24 }]}>|</Text>
+                    <TabButton label="Past" tabName="Past"
+                               activeTab={activeTab} setActiveTab={setActiveTab} />
+                </View>
             </View>
             <View style={commonStyles.eventsMiddle}>
-                {/*<Image source={constants.picture}></Image>*/}
-                {/*<Text style={[commonStyles.text, {color: COLORS.grey}]}>No events yet</Text>*/}
-                <ScrollView>
-                    <EventsItem
-                        backgroundColor={COLORS.redcoral}
-                        name={"Charlotte’s birthday party"}
-                        date={"29.07.2023"}
-                    ></EventsItem>
+                {events.length > 0 ? (
+                    <ScrollView>
+                        {events.map((event, index) => (
+                            <EventsItem
+                                backgroundColor={eventColors[index % eventColors.length]}
+                                name={event.name}
+                                date={event.date}
+                            ></EventsItem>
+                        ))}
 
-                    <EventsItem
-                        backgroundColor={COLORS.orange}
-                        name={"Gender Reveal Party"}
-                        date={"15.08.2023"}
-                    ></EventsItem>
-
-                    <EventsItem
-                        backgroundColor={COLORS.pink}
-                        name={"Corporate event"}
-                        date={"09.10.2023"}
-                    ></EventsItem>
-
-                    <EventsItem
-                        backgroundColor={COLORS.red}
-                        name={"Emily and Sam's Wedding"}
-                        date={"05.05.2024"}
-                    ></EventsItem>
-
-                    <EventsItem
-                        backgroundColor={COLORS.redcoral}
-                        name={"Charlotte’s birthday party"}
-                        date={"29.07.2023"}
-                    ></EventsItem>
-                </ScrollView>
+                    </ScrollView>
+                ):(
+                    <Text style={[commonStyles.text, {color: COLORS.pinkdark,
+                        backgroundColor: 'rgba(255, 255, 255, 0.85)', top: 30,
+                    }]}>No events yet</Text>
+                )}
                 <ModalWindow
                     isVisible={isModalVisible}
                     onClose={closeModal}

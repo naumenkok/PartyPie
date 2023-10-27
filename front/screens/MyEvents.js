@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Image, ImageBackground, View, TouchableOpacity, Text, ScrollView} from 'react-native';
 import { commonStyles } from '../styles/styles.js';
 import constants from '../constants/img.js';
@@ -6,49 +6,58 @@ import {COLORS} from "../constants/theme";
 import {LinearGradient} from "expo-linear-gradient";
 import EventsItem from "../components/EventsItem";
 import TabButton from "../components/TabButton";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getMyPastEvents, getMyFutureEvents} from "../services/api";
 
 export default function MyEvents({navigation}) {
+    const [activeTab, setActiveTab] = useState("Upcoming");
+    const [events, setEvents] = useState([]);
+    const eventColors = [COLORS.redcoral, COLORS.orange, COLORS.pink, COLORS.red, COLORS.redcoral];
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const userId = await AsyncStorage.getItem('userId');
+                const events =  activeTab==="Upcoming"? await getMyFutureEvents(userId):await getMyPastEvents(userId);
+                setEvents(events);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchData();
+        const intervalId = setInterval(fetchData, 2000);
+        return () => clearInterval(intervalId);
+    }, [activeTab]);
 
     return (
         <ImageBackground source={constants.gradientMyEvents} style={commonStyles.imageBackground}>
             <View style={commonStyles.eventsTop}>
                 <Text style={[commonStyles.text, {color: COLORS.orange, fontSize:28}]}>I invite:</Text>
-                <TabButton></TabButton>
+                <View style={commonStyles.horizontal}>
+                    <TabButton label="Upcoming" tabName="Upcoming"
+                        activeTab={activeTab} setActiveTab={setActiveTab}/>
+                    <Text style={[commonStyles.text, { color: COLORS.red, fontSize: 24 }]}>|</Text>
+                    <TabButton label="Past" tabName="Past"
+                        activeTab={activeTab} setActiveTab={setActiveTab} />
+                </View>
             </View>
             <View style={commonStyles.eventsMiddle}>
-                {/*<Image source={constants.picture}></Image>*/}
-                {/*<Text style={[commonStyles.text, {color: COLORS.pinkdark}]}>No events yet</Text>*/}
+                {events.length > 0 ? (
                 <ScrollView>
-                    <EventsItem
-                        backgroundColor={COLORS.redcoral}
-                        name={"Charlotte’s birthday party"}
-                        date={"29.07.2023"}
-                    ></EventsItem>
+                    {events.map((event, index) => (
+                        <EventsItem
+                            backgroundColor={eventColors[index % eventColors.length]}
+                            name={event.name}
+                            date={event.date}
+                        ></EventsItem>
+                    ))}
 
-                    <EventsItem
-                        backgroundColor={COLORS.orange}
-                        name={"Gender Reveal Party"}
-                        date={"15.08.2023"}
-                    ></EventsItem>
-
-                    <EventsItem
-                        backgroundColor={COLORS.pink}
-                        name={"Corporate event"}
-                        date={"09.10.2023"}
-                    ></EventsItem>
-
-                    <EventsItem
-                        backgroundColor={COLORS.red}
-                        name={"Emily and Sam's Wedding"}
-                        date={"05.05.2024"}
-                    ></EventsItem>
-
-                    <EventsItem
-                        backgroundColor={COLORS.redcoral}
-                        name={"Charlotte’s birthday party"}
-                        date={"29.07.2023"}
-                    ></EventsItem>
                 </ScrollView>
+                    ):(
+                <Text style={[commonStyles.text, {color: COLORS.pinkdark,
+                    backgroundColor: 'rgba(255, 255, 255, 0.85)', top: 30,
+                }]}>No events yet</Text>
+                    )}
             </View>
             <View style={commonStyles.eventsBottom}>
                 <View>
@@ -70,5 +79,8 @@ export default function MyEvents({navigation}) {
         </ImageBackground>
     );
 }
+
+
+
 
 

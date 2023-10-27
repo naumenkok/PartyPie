@@ -5,7 +5,8 @@ import { commonStyles } from '../styles/styles.js';
 import constants from '../constants/img.js';
 import {LinearGradient} from "expo-linear-gradient";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { authenticateUser } from '../services/api';
 
 export default function LogIn({navigation}) {
     const [username, setUsername] = useState('');
@@ -13,6 +14,17 @@ export default function LogIn({navigation}) {
     const [showPassword, setShowPassword] = useState(false);
     const toggleShowPassword = () => {setShowPassword(!showPassword);};
 
+    const handleLogin = async () => {
+        try {
+            const userId = await authenticateUser(username, password);
+            console.log(`userId=${userId}`);
+            await AsyncStorage.setItem('userId', userId.toString());
+            console.log("saved id");
+            navigation.navigate('TabNavigator');
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <ImageBackground source={constants.gradient} style={commonStyles.imageBackground}>
@@ -67,9 +79,7 @@ export default function LogIn({navigation}) {
                     style={[commonStyles.buttonGradient, {marginTop: 10}]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('TabNavigator')}
-                    >
+                    <TouchableOpacity onPress={handleLogin}>
                         <View style={commonStyles.horizontal}>
                             <Text style={commonStyles.text}>Create</Text>
                             <Image source={constants.arrow}></Image>

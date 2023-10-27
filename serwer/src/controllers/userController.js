@@ -14,7 +14,7 @@ exports.createUser = (req, res) => {
 };
 
 exports.getUserById = (req, res) => {
-    const userId = req.params.userId;
+    const {userId} = req.query;
 
     User.getUserById(userId, (err, user) => {
         if (err) {
