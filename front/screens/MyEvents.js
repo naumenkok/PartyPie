@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Image, ImageBackground, View, TouchableOpacity, Text, ScrollView} from 'react-native';
+import {Image, ImageBackground, View, TouchableOpacity, Text, ScrollView, PanResponder} from 'react-native';
 import { commonStyles } from '../styles/styles.js';
 import constants from '../constants/img.js';
 import {COLORS} from "../constants/theme";
@@ -8,30 +8,53 @@ import EventsItem from "../components/EventsItem";
 import TabButton from "../components/TabButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getMyPastEvents, getMyFutureEvents} from "../services/api";
+import Skeleton from "../components/Skeleton";
 
 export default function MyEvents({navigation}) {
     const [activeTab, setActiveTab] = useState("Upcoming");
     const [events, setEvents] = useState([]);
+    const [isLoading, setLoading] = useState(true);
+    const [panResponder, setPanResponder] = useState(null);
     const eventColors = [COLORS.redcoral, COLORS.orange, COLORS.pink, COLORS.red, COLORS.redcoral];
 
+    const delay = ms => new Promise(
+        resolve => setTimeout(resolve, ms)
+    );
+
+    const fetchData = async () => {
+        setLoading(true);
+        await delay(2000);
+        try {
+            const userId = await AsyncStorage.getItem('userId');
+            const events =  activeTab==="Upcoming"? await getMyFutureEvents(userId):await getMyPastEvents(userId);
+            setEvents(events);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userId = await AsyncStorage.getItem('userId');
-                const events =  activeTab==="Upcoming"? await getMyFutureEvents(userId):await getMyPastEvents(userId);
-                setEvents(events);
-            } catch (error) {
-                console.error(error);
-            }
-        };
         fetchData();
-        const intervalId = setInterval(fetchData, 2000);
-        return () => clearInterval(intervalId);
+    }, [activeTab]);
+
+    useEffect(() => {
+        setPanResponder(
+            PanResponder.create({
+                onStartShouldSetPanResponder: () => true,
+                onPanResponderRelease: (e, gestureState) => {
+                    if (gestureState.dy > 50) {
+                        fetchData();
+                    }
+                },
+            })
+        );
     }, [activeTab]);
 
     return (
         <ImageBackground source={constants.gradientMyEvents} style={commonStyles.imageBackground}>
-            <View style={commonStyles.eventsTop}>
+            <View style={commonStyles.eventsTop} {...panResponder?.panHandlers}>
                 <Text style={[commonStyles.text, {color: COLORS.orange, fontSize:28}]}>I invite:</Text>
                 <View style={commonStyles.horizontal}>
                     <TabButton label="Upcoming" tabName="Upcoming"
@@ -41,12 +64,20 @@ export default function MyEvents({navigation}) {
                         activeTab={activeTab} setActiveTab={setActiveTab} />
                 </View>
             </View>
-            <View style={commonStyles.eventsMiddle}>
-                {events.length > 0 ? (
+            <View style={commonStyles.eventsMiddle} {...panResponder?.panHandlers}>
+                {isLoading ? (
+                    <ScrollView>
+                        <Skeleton />
+                        <Skeleton />
+                        <Skeleton />
+                    </ScrollView>
+                ):events.length > 0 ? (
                 <ScrollView>
                     {events.map((event, index) => (
                         <EventsItem
+                            navigation = {navigation}
                             backgroundColor={eventColors[index % eventColors.length]}
+                            event_id={event.event_id}
                             name={event.name}
                             date={event.date}
                         ></EventsItem>

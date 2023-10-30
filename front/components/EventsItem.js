@@ -1,13 +1,25 @@
 import React from 'react';
-import {View, Text} from "react-native";
+import {View, Text, TouchableOpacity} from "react-native";
 import { itemStyle } from '../styles/eventsListItemStyle';
 import { BlurView } from 'expo-blur';
 import {LinearGradient} from "expo-linear-gradient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function EventsItem({ backgroundColor, name, date }) {
+export default function EventsItem({ navigation, backgroundColor, event_id, name, date }) {
     const commonStyles = itemStyle({ backgroundColor});
+
+    const openEventPage = async (eventId) => {
+        try {
+            await AsyncStorage.setItem('eventID', eventId.toString());
+            console.log("saved id");
+            navigation.navigate('EventPage');
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return(
-        <View style={commonStyles.eventItem}>
+        <TouchableOpacity style={commonStyles.eventItem} onPress={() => openEventPage(event_id)}>
             <BlurView intensity={60} tint="light" style={commonStyles.blur}>
                 <LinearGradient colors={['rgba(255,255,255,0.2)', "rgba(255,255,255,0.0)"]}
                                 start={{x:0, y:1}}
@@ -20,6 +32,6 @@ export default function EventsItem({ backgroundColor, name, date }) {
                     <Text style={commonStyles.textEventsDate}>{date}</Text>
                 </LinearGradient>
             </BlurView>
-        </View>
+        </TouchableOpacity>
     );
 }

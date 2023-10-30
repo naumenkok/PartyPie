@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, ImageBackground, TouchableOpacity, Text, ScrollView, Image} from 'react-native';
+import {View, ImageBackground, TouchableOpacity, Text, ScrollView, PanResponder} from 'react-native';
 import { commonStyles } from '../styles/styles.js';
 import {LinearGradient} from "expo-linear-gradient";
 import {COLORS} from "../constants/theme";
@@ -8,28 +8,53 @@ import constants from "../constants/img";
 import ModalWindow from "../components/ModalAddEventScreen";
 import TabButton from "../components/TabButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {getFutureEvents, getPastEvents} from "../services/api";
+import {authenticateUser, getFutureEvents, getMyFutureEvents, getMyPastEvents, getPastEvents} from "../services/api";
+import Skeleton from "../components/Skeleton";
 
 export default function Events({navigation}) {
     const [activeTab, setActiveTab] = useState("Upcoming");
     const [isModalVisible, setModalVisible] = useState(false);
     const [events, setEvents] = useState([]);
+    const [isLoading, setLoading] = useState(true);
+    const [panResponder, setPanResponder] = useState(null);
     const eventColors = [COLORS.redcoral, COLORS.orange, COLORS.pink, COLORS.red, COLORS.redcoral];
 
+    const delay = ms => new Promise(
+        resolve => setTimeout(resolve, ms)
+    );
+
+    const fetchData = async () => {
+        setLoading(true);
+        await delay(2000);
+        try {
+            const userId = await AsyncStorage.getItem('userId');
+            const events =  activeTab==="Upcoming"? await getFutureEvents(userId):await getPastEvents(userId);
+            setEvents(events);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userId = await AsyncStorage.getItem('userId');
-                const events =  activeTab==="Upcoming"? await getFutureEvents(userId):await getPastEvents(userId);
-                setEvents(events);
-            } catch (error) {
-                console.error(error);
-            }
-        };
         fetchData();
-        const intervalId = setInterval(fetchData, 2000);
-        return () => clearInterval(intervalId);
     }, [activeTab]);
+
+    useEffect(() => {
+        setPanResponder(
+            PanResponder.create({
+                onStartShouldSetPanResponder: () => true,
+                onPanResponderRelease: (e, gestureState) => {
+                    if (gestureState.dy > 50) {
+                        fetchData();
+                    }
+                },
+            })
+        );
+    }, [activeTab]);
+
+
     const openModal = () => {
         setModalVisible(true);
     };
@@ -43,10 +68,9 @@ export default function Events({navigation}) {
         closeModal();
     };
 
-
     return (
-        <ImageBackground source={constants.gradientEvents} style={commonStyles.imageBackground}>
-            <View style={commonStyles.eventsTop}>
+        <ImageBackground source={constants.gradientEvents} style={commonStyles.imageBackground} >
+            <View style={commonStyles.eventsTop} {...panResponder?.panHandlers}>
                 <Text style={[commonStyles.text, {color: COLORS.orange, fontSize:28}]}>I was invited:</Text>
                 <View style={commonStyles.horizontal}>
                     <TabButton label="Upcoming" tabName="Upcoming"
@@ -56,18 +80,26 @@ export default function Events({navigation}) {
                                activeTab={activeTab} setActiveTab={setActiveTab} />
                 </View>
             </View>
-            <View style={commonStyles.eventsMiddle}>
-                {events.length > 0 ? (
+            <View style={commonStyles.eventsMiddle} {...panResponder?.panHandlers}>
+                {isLoading ? (
                     <ScrollView>
-                        {events.map((event, index) => (
-                            <EventsItem
-                                backgroundColor={eventColors[index % eventColors.length]}
-                                name={event.name}
-                                date={event.date}
-                            ></EventsItem>
-                        ))}
-
+                        <Skeleton />
+                        <Skeleton />
+                        <Skeleton />
                     </ScrollView>
+                ):events.length > 0 ? (
+                            <ScrollView>
+                                {events.map((event, index) => (
+                                    <EventsItem
+                                        navigation = {navigation}
+                                        backgroundColor={eventColors[index % eventColors.length]}
+                                        event_id={event.event_id}
+                                        name={event.name}
+                                        date={event.date}
+                                    ></EventsItem>
+                                ))}
+
+                            </ScrollView>
                 ):(
                     <Text style={[commonStyles.text, {color: COLORS.pinkdark,
                         backgroundColor: 'rgba(255, 255, 255, 0.85)', top: 30,

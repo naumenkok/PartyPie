@@ -26,7 +26,7 @@ export const itemStyle = ({ backgroundColor}) => {
             width: 350,
             borderColor: backgroundColor,
             borderWidth: 8,
-            alignItems: 'flex-start',
+            alignItems: 'flex-end',
             margin: 5,
             borderRadius: 20,
             overflow: 'hidden',
@@ -38,6 +38,6 @@ export const itemStyle = ({ backgroundColor}) => {
         gradient:{
             height: '100%',
             width: '100%',
-        }
+        },
     });
 };

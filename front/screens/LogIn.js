@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {ImageBackground, View, TouchableOpacity, Text, TextInput, Image, Platform} from 'react-native';
-
 import { commonStyles } from '../styles/styles.js';
 import constants from '../constants/img.js';
 import {LinearGradient} from "expo-linear-gradient";

@@ -1,5 +1,6 @@
 import gradient from "../assets/img/gradient.jpg";
 import gradientLight from "../assets/img/gradientLight.png";
+import gradientBright from "../assets/img/gradientBright.png";
 import gradientProfile from "../assets/img/gradientProfile.png";
 import gradientProfileLight from "../assets/img/gradientProfileLight.png";
 import gradientEvents from "../assets/img/gradientEvents.png";
@@ -20,6 +21,7 @@ import picture from "../assets/img/picture.png";
 export default {
     gradient,
     gradientLight,
+    gradientBright,
     gradientProfile,
     gradientProfileLight,
     gradientEvents,
