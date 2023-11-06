@@ -40,6 +40,18 @@ class Event {
             }
         });
     }
+
+    static getEventsByEventId(eventId, callback) {
+        const query = "SELECT * FROM Events WHERE event_id = ?";
+        connection.query(query, eventId, (err, data) => {
+            if (err) {
+                console.error('Error in SQL query', err);
+                callback(err, null);
+            } else {
+                callback(null, data);
+            }
+        });
+    }
 }
 
 module.exports = Event;

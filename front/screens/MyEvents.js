@@ -75,6 +75,7 @@ export default function MyEvents({navigation}) {
                 <ScrollView>
                     {events.map((event, index) => (
                         <EventsItem
+                            key={index}
                             navigation = {navigation}
                             backgroundColor={eventColors[index % eventColors.length]}
                             event_id={event.event_id}

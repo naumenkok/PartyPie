@@ -75,3 +75,45 @@ export const getFutureEvents = async (userId) => {
         console.error('Error in getMyPastEvents:', error);
     }
 };
+
+export const getUsernameByID = async (userId) => {
+    try {
+        const response = await axios.get(
+            `${BASE_URL}/userRoute/usernameById/${userId}`);
+        if (response.data) {
+            return response.data[0].username;
+        } else {
+            console.error('Error in data getUsernameByID:', error);
+        }
+    } catch (error) {
+        console.error('Error in getUsernameByID:', error);
+    }
+};
+
+export const getEventByEventId = async (eventId) => {
+    try {
+        const response = await axios.get(
+            `${BASE_URL}/eventRoute/event/${eventId}`);
+        if (response.data) {
+            return response.data[0];
+        } else {
+            console.error('Error in data getEventByEventId:', error);
+        }
+    } catch (error) {
+        console.error('Error in getEventByEventId:', error);
+    }
+};
+
+export const getPostsByEventId = async (eventId) => {
+    try {
+        const response = await axios.get(
+            `${BASE_URL}/postRoute/posts/${eventId}`);
+        if (response.data) {
+            return response.data;
+        } else {
+            console.error('Error in data getPostsByEventId:', error);
+        }
+    } catch (error) {
+        console.error('Error in getPostsByEventIds:', error);
+    }
+};

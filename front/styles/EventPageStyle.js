@@ -7,7 +7,6 @@ export const eventPageStyle = StyleSheet.create({
             alignSelf: 'stretch',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: 'red',
         },
         eventNameView:{
             flex: 1,
@@ -19,8 +18,8 @@ export const eventPageStyle = StyleSheet.create({
             marginHorizontal: 20,
             marginTop: 45,
             marginBottom:20,
-            borderWidth: 8,
-            borderColor: COLORS.white,
+            // borderWidth: 8,
+            // borderColor: COLORS.white,
             borderRadius: 20,
         },
         eventName:{
@@ -34,25 +33,30 @@ export const eventPageStyle = StyleSheet.create({
         },
         eventPageBottom:{
             flex: 13,
-            backgroundColor: 'blue',
-            justifyContent: 'center',
-            //alignItems: 'stretch',
+            height: '100%',
+            // justifyContent: 'flex-end',
+            alignItems: 'flex-end',
             alignSelf: 'stretch',
+            marginHorizontal: 10,
         },
         eventPageScroll:{
-            backgroundColor: 'green',
-            flex: 9,
+            flexDirection: 'column',
+            alignSelf: 'stretch',
         },
         scrollBox1:{
-            flex: 3,
-            backgroundColor: 'blue',
-        },
-        scrollBox2:{
-            flex: 3,
+            height: 50,
+            width: '100%',
+            alignItems: 'flex-end',
+            alignSelf: 'stretch',
             backgroundColor: 'pink',
         },
+        scrollBox2:{
+            height: 120,
+            backgroundColor: 'blue',
+            width: '100%',
+        },
         scrollBox3:{
-            flex: 3,
-            backgroundColor: 'purple',
+            //height: 30,
+            width: '100%',
         },
 });

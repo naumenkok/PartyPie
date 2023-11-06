@@ -10,8 +10,8 @@ export default function EventsItem({ navigation, backgroundColor, event_id, name
 
     const openEventPage = async (eventId) => {
         try {
-            await AsyncStorage.setItem('eventID', eventId.toString());
-            console.log("saved id");
+            await AsyncStorage.setItem('eventId', eventId.toString());
+            console.log("saved eventId");
             navigation.navigate('EventPage');
         } catch (error) {
             console.error(error);

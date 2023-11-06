@@ -30,6 +30,10 @@ class User {
         connection.query('SELECT * FROM Users WHERE user_id = ?', [userId], callback);
     }
 
+    static getUsernameById(userId, callback) {
+        connection.query('SELECT username FROM Users WHERE user_id = ?', [userId], callback);
+    }
+
     static getAllUsers(callback) {
         const query = "SELECT * FROM Users";
         connection.query(query, (err, users) => {

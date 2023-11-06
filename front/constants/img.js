@@ -7,6 +7,7 @@ import gradientEvents from "../assets/img/gradientEvents.png";
 import gradientMyEvents from "../assets/img/gradientMyEvents.png";
 import logo from "../assets/img/logo3.png";
 import arrow from "../assets/img/arrow.png";
+import smile from "../assets/img/smile1.png";
 import star1 from "../assets/img/first/star1.png";
 import star2 from "../assets/img/first/star2.png";
 import strawberry1 from "../assets/img/first/strawberry1.png";
@@ -28,6 +29,7 @@ export default {
     gradientMyEvents,
     logo,
     arrow,
+    smile,
     star1,
     star2,
     strawberry1,

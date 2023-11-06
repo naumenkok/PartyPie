@@ -40,3 +40,16 @@ exports.getFutureMyEventsByUserId = (req, res) => {
     });
 };
 
+exports.getEventsByEventId = (req, res) => {
+    const eventId = req.params.eventId;
+
+    Event.getEventsByEventId(eventId, (err, data) => {
+        if (err) {
+            console.error('Error in controller:', err);
+            res.status(500).json({ error: 'Error retrieving events data' });
+        } else {
+            res.status(200).json(data);
+        }
+    });
+};
+

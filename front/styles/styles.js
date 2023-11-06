@@ -8,6 +8,11 @@ export const commonStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'stretch',
     },
+    empty:{flex: 1,
+        resizeMode: 'cover',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        backgroundColor: COLORS.beige},
 
     //img for welcome screen
     logo: {
