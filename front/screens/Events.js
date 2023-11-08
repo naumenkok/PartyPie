@@ -8,7 +8,14 @@ import constants from "../constants/img";
 import ModalWindow from "../components/ModalAddEventScreen";
 import TabButton from "../components/TabButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {authenticateUser, getFutureEvents, getMyFutureEvents, getMyPastEvents, getPastEvents} from "../services/api";
+import {
+    addGuest,
+    authenticateUser,
+    getFutureEvents,
+    getMyFutureEvents,
+    getMyPastEvents,
+    getPastEvents
+} from "../services/api";
 import Skeleton from "../components/Skeleton";
 
 export default function Events({navigation}) {
@@ -37,6 +44,17 @@ export default function Events({navigation}) {
         }
     };
 
+    const fetchAddGuest = async () => {
+        await delay(2000);
+        try {
+            const userId = await AsyncStorage.getItem('userId');
+            const code = await AsyncStorage.getItem('code');
+            const events = await addGuest(userId, code);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
         fetchData();
     }, [activeTab]);
@@ -54,18 +72,8 @@ export default function Events({navigation}) {
         );
     }, [activeTab]);
 
-
-    const openModal = () => {
-        setModalVisible(true);
-    };
-
-    const closeModal = () => {
-        setModalVisible(false);
-    };
-
     const handleSubmit = () => {
-        //
-        closeModal();
+        fetchAddGuest().then(r => setModalVisible(false));
     };
 
     return (
@@ -108,7 +116,7 @@ export default function Events({navigation}) {
                 )}
                 <ModalWindow
                     isVisible={isModalVisible}
-                    onClose={closeModal}
+                    onClose={() => setModalVisible(false)}
                     onSubmit={handleSubmit}
                 />
             </View>
@@ -119,8 +127,8 @@ export default function Events({navigation}) {
                         style={commonStyles.buttonGradient}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 0 }}>
-                        <TouchableOpacity onPress={openModal}>
-                            <View style={commonStyles.horizontal}>
+                        <TouchableOpacity onPress={() => setModalVisible(true)}>
+                        <View style={commonStyles.horizontal}>
                                 <Text style={[commonStyles.text, {fontSize:24}]}>Add new</Text>
                             </View>
                         </TouchableOpacity>

@@ -3,6 +3,7 @@ import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faCircleXmark} from "@fortawesome/free-regular-svg-icons";
 import { commonStyles } from '../styles/styles.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {modalStyles} from "../styles/modalWindowsStyle";
 import {
     CodeField,
@@ -21,6 +22,12 @@ export default function ModalWindow ({ isVisible, onClose, onSubmit }) {
         setValue,
     });
 
+    const handleSubmit = async () => {
+        console.log(value);
+        await AsyncStorage.setItem('code', value);
+        onSubmit();
+    };
+
     return (
         <Modal
             visible={isVisible}
@@ -31,12 +38,12 @@ export default function ModalWindow ({ isVisible, onClose, onSubmit }) {
             <View style={modalStyles.modalContainer}>
                 <View style={modalStyles.modalContent}>
                     <View style={commonStyles.horizontal}>
-                        <Text style={modalStyles.title}>Enter the event ID</Text>
+                        <Text style={modalStyles.title}>Enter the event code</Text>
                     </View>
                     <TouchableOpacity onPress={onClose} style={modalStyles.closeButton}>
                         <FontAwesomeIcon icon={faCircleXmark} size={24}/>
                     </TouchableOpacity>
-                    <Text style={modalStyles.modalText}>The Event ID is in the email or SMS you received.</Text>
+                    <Text style={modalStyles.modalText}>The event code is in the email or SMS you received.</Text>
                     <CodeField
                         ref={ref}
                         {...props}
@@ -44,7 +51,6 @@ export default function ModalWindow ({ isVisible, onClose, onSubmit }) {
                         onChangeText={setValue}
                         cellCount={CELL_COUNT}
                         rootStyle={modalStyles.codeFieldRoot}
-                        keyboardType="number-pad"
                         textContentType="oneTimeCode"
                         renderCell={({index, symbol, isFocused}) => (
                             <Text
@@ -55,7 +61,7 @@ export default function ModalWindow ({ isVisible, onClose, onSubmit }) {
                             </Text>
                         )}
                     />
-                    <TouchableOpacity onPress={onSubmit} style={modalStyles.submitButton}>
+                    <TouchableOpacity onPress={handleSubmit} style={modalStyles.submitButton}>
                         <Text style={modalStyles.submitButtonText}>Submit</Text>
                     </TouchableOpacity>
                 </View>

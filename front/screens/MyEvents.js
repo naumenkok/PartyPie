@@ -7,12 +7,16 @@ import {LinearGradient} from "expo-linear-gradient";
 import EventsItem from "../components/EventsItem";
 import TabButton from "../components/TabButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getMyPastEvents, getMyFutureEvents} from "../services/api";
+import {getMyPastEvents, getMyFutureEvents, deleteEventByEventId} from "../services/api";
 import Skeleton from "../components/Skeleton";
+import ModalCreateEvent from "../components/ModalCreateEvent";
+import ModalDelete from "../components/ModalDelete";
 
 export default function MyEvents({navigation}) {
     const [activeTab, setActiveTab] = useState("Upcoming");
     const [events, setEvents] = useState([]);
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [isModalDeleteVisible, setModalDeleteVisible] = useState(false);
     const [isLoading, setLoading] = useState(true);
     const [panResponder, setPanResponder] = useState(null);
     const eventColors = [COLORS.redcoral, COLORS.orange, COLORS.pink, COLORS.red, COLORS.redcoral];
@@ -52,6 +56,25 @@ export default function MyEvents({navigation}) {
         );
     }, [activeTab]);
 
+    const handleSubmit = () => {
+        //
+        setModalVisible(false);
+    };
+
+    const handleDelete = () => {
+        onDelete();
+        setModalDeleteVisible(false);
+    };
+    const onDelete = async () => {
+        try {
+            const eventIdForDelete = await AsyncStorage.getItem('eventIdForDelete');
+            const response = await deleteEventByEventId(eventIdForDelete);
+            console.log('deleted', response);
+        } catch (error) {
+            console.error('error', error);
+        }
+    };
+
     return (
         <ImageBackground source={constants.gradientMyEvents} style={commonStyles.imageBackground}>
             <View style={commonStyles.eventsTop} {...panResponder?.panHandlers}>
@@ -81,9 +104,20 @@ export default function MyEvents({navigation}) {
                             event_id={event.event_id}
                             name={event.name}
                             date={event.date}
+                            isModalVisible={isModalDeleteVisible}
+                            setModalVisible={setModalDeleteVisible}
                         ></EventsItem>
                     ))}
-
+                    <ModalCreateEvent
+                        isVisible={isModalVisible}
+                        onClose={() => setModalVisible(false)}
+                        onSubmit={handleSubmit}
+                    />
+                    <ModalDelete
+                        isVisible={isModalDeleteVisible}
+                        onClose={() => setModalDeleteVisible(false)}
+                        onSubmit={handleDelete}
+                    />
                 </ScrollView>
                     ):(
                 <Text style={[commonStyles.text, {color: COLORS.pinkdark,
@@ -98,9 +132,7 @@ export default function MyEvents({navigation}) {
                         style={commonStyles.buttonGradient}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 0 }}>
-                        <TouchableOpacity
-                            // onPress={() => navigation.navigate('Events')}
-                        >
+                        <TouchableOpacity onPress={() => setModalVisible(true)}>
                             <View style={commonStyles.horizontal}>
                                 <Text style={[commonStyles.text, {fontSize:24}]}>create new</Text>
                             </View>

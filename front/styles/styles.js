@@ -89,6 +89,7 @@ export const commonStyles = StyleSheet.create({
         fontSize: 30,
         textTransform: 'uppercase',
         color:COLORS.orange,
+        textAlign: 'center',
         fontFamily: FONTS.unique,
         marginVertical: 10,
     },
@@ -207,8 +208,8 @@ export const commonStyles = StyleSheet.create({
     },
     profileTop:{
         flex: 1,
-        alignItems: 'flex-start',
-        justifyContent: 'flex-end',
+        alignItems: 'center',
+        justifyContent: 'center',
         marginHorizontal: 60,
     },
     profileBottom:{

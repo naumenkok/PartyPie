@@ -39,5 +39,10 @@ export const itemStyle = ({ backgroundColor}) => {
             height: '100%',
             width: '100%',
         },
+        closeButton:{
+            position: 'absolute',
+            top: 5,
+            right: 5,
+        },
     });
 };

@@ -1,19 +1,20 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {ImageBackground, View, TouchableOpacity, Text, TextInput, Image, Platform} from 'react-native';
 import { commonStyles } from '../styles/styles.js';
 import constants from '../constants/img.js';
-import {faUserAstronaut} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
+import { BlurView } from 'expo-blur';
 import {COLORS} from "../constants/theme";
 
 export default function Profile({navigation}) {
     return (
-        <ImageBackground source={constants.gradientProfile} style={commonStyles.imageBackground}>
+        <ImageBackground source={constants.gradientEvents} style={commonStyles.imageBackground}>
             <View style={commonStyles.profileTop}>
-                <Text style={commonStyles.name}>charlotte tilbury</Text>
-                <FontAwesomeIcon icon={faUserAstronaut} size={140} style={{
-                    color: COLORS.red,
-                    alignSelf:'flex-end'}} />
+
+                <View style={[commonStyles.buttonProfile, {width: 300}]}>
+                    <BlurView intensity={30} tint="light" style={[commonStyles.blur]}>
+                    <Text style={commonStyles.name}>charlotte tilbury</Text>
+                    </BlurView>
+                </View>
             </View>
             <View style={commonStyles.profileBottom}>
                 <View style={[commonStyles.buttonProfile, commonStyles.buttonProfileLogOut]}>

@@ -53,3 +53,33 @@ exports.getEventsByEventId = (req, res) => {
     });
 };
 
+exports.addEvent = (req, res) => {
+    const eventData = {
+        creator_id: req.body.creator_id,
+        name: req.body.name,
+        type: req.body.type,
+        date: req.body.date
+    };
+
+    Event.addEvent(eventData, (err, data) => {
+        if (err) {
+            console.error('Error in controller:', err);
+            res.status(500).json({ error: 'Error adding event' });
+        } else {
+            res.status(201).json({ message: 'Event added successfully' });
+        }
+    });
+};
+
+exports.deleteEventByEventId = (req, res) => {
+    const eventId = req.params.eventId;
+
+    Event.deleteEventByEventId(eventId, (err, data) => {
+        if (err) {
+            console.error('Error in controller:', err);
+            res.status(500).json({ error: 'Error deleting the event' });
+        } else {
+            res.status(200).json({ message: 'Event deleted successfully' });
+        }
+    });
+};
