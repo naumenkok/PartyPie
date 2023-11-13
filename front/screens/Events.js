@@ -10,10 +10,7 @@ import TabButton from "../components/TabButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
     addGuest,
-    authenticateUser,
     getFutureEvents,
-    getMyFutureEvents,
-    getMyPastEvents,
     getPastEvents
 } from "../services/api";
 import Skeleton from "../components/Skeleton";
@@ -21,8 +18,9 @@ import Skeleton from "../components/Skeleton";
 export default function Events({navigation}) {
     const [activeTab, setActiveTab] = useState("Upcoming");
     const [isModalVisible, setModalVisible] = useState(false);
-    const [events, setEvents] = useState([]);
-    const [isLoading, setLoading] = useState(true);
+    const [events, setEvents] = useState([]);;
+    const [isLoading, setLoading] = useState(false);
+    const [isLongLoading, setLongLoading] = useState(true);
     const [panResponder, setPanResponder] = useState(null);
     const eventColors = [COLORS.redcoral, COLORS.orange, COLORS.pink, COLORS.red, COLORS.redcoral];
 
@@ -31,33 +29,56 @@ export default function Events({navigation}) {
     );
 
     const fetchData = async () => {
-        setLoading(true);
-        await delay(2000);
         try {
             const userId = await AsyncStorage.getItem('userId');
             const events =  activeTab==="Upcoming"? await getFutureEvents(userId):await getPastEvents(userId);
             setEvents(events);
         } catch (error) {
             console.error(error);
+        }
+    };
+
+    const fetchPosts = async () => {
+        setLongLoading(true);
+        await delay(2000);
+        try {
+            await fetchData();
+        } catch (error) {
+            console.error(error);
         } finally {
-            setLoading(false);
+            setLongLoading(false);
         }
     };
 
     const fetchAddGuest = async () => {
-        await delay(2000);
         try {
             const userId = await AsyncStorage.getItem('userId');
             const code = await AsyncStorage.getItem('code');
-            const events = await addGuest(userId, code);
+            await addGuest(userId, code);
         } catch (error) {
             console.error(error);
         }
     };
 
     useEffect(() => {
-        fetchData();
+        (async () => {
+            try {
+                await fetchPosts();
+            } catch (error) {
+                console.error('error', error);
+            }
+        })();
     }, [activeTab]);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                await fetchData();
+            } catch (error) {
+                console.error('error', error);
+            }
+        })();
+    }, [isLoading]);
 
     useEffect(() => {
         setPanResponder(
@@ -65,7 +86,13 @@ export default function Events({navigation}) {
                 onStartShouldSetPanResponder: () => true,
                 onPanResponderRelease: (e, gestureState) => {
                     if (gestureState.dy > 50) {
-                        fetchData();
+                        (async () => {
+                            try {
+                                await fetchPosts();
+                            } catch (error) {
+                                console.error('error', error);
+                            }
+                        })();
                     }
                 },
             })
@@ -73,7 +100,7 @@ export default function Events({navigation}) {
     }, [activeTab]);
 
     const handleSubmit = () => {
-        fetchAddGuest().then(r => setModalVisible(false));
+        fetchAddGuest().then(() => {setModalVisible(false); setLoading(true);});
     };
 
     return (
@@ -89,7 +116,7 @@ export default function Events({navigation}) {
                 </View>
             </View>
             <View style={commonStyles.eventsMiddle} {...panResponder?.panHandlers}>
-                {isLoading ? (
+                {isLongLoading ? (
                     <ScrollView>
                         <Skeleton />
                         <Skeleton />

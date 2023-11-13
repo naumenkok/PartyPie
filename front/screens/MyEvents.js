@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Image, ImageBackground, View, TouchableOpacity, Text, ScrollView, PanResponder} from 'react-native';
+import {ImageBackground, View, TouchableOpacity, Text, ScrollView, PanResponder} from 'react-native';
 import { commonStyles } from '../styles/styles.js';
 import constants from '../constants/img.js';
 import {COLORS} from "../constants/theme";
@@ -17,7 +17,8 @@ export default function MyEvents({navigation}) {
     const [events, setEvents] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
     const [isModalDeleteVisible, setModalDeleteVisible] = useState(false);
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(false);
+    const [isLongLoading, setLongLoading] = useState(true);
     const [panResponder, setPanResponder] = useState(null);
     const eventColors = [COLORS.redcoral, COLORS.orange, COLORS.pink, COLORS.red, COLORS.redcoral];
 
@@ -26,22 +27,50 @@ export default function MyEvents({navigation}) {
     );
 
     const fetchData = async () => {
-        setLoading(true);
-        await delay(2000);
         try {
             const userId = await AsyncStorage.getItem('userId');
             const events =  activeTab==="Upcoming"? await getMyFutureEvents(userId):await getMyPastEvents(userId);
             setEvents(events);
         } catch (error) {
             console.error(error);
-        } finally {
-            setLoading(false);
         }
     };
 
+    const fetchEvents = async () => {
+        setLongLoading(true);
+        await delay(2000);
+        try {
+            await fetchData;
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLongLoading(false);
+        }
+    };
+
+
     useEffect(() => {
-        fetchData();
+        (async () => {
+            try {
+                await fetchEvents();
+            } catch (error) {
+                console.error('error', error);
+            }
+        })();
     }, [activeTab]);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                await fetchData();
+            } catch (error) {
+                console.error('error', error);
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, [activeTab, isLoading]);
+
 
     useEffect(() => {
         setPanResponder(
@@ -49,22 +78,34 @@ export default function MyEvents({navigation}) {
                 onStartShouldSetPanResponder: () => true,
                 onPanResponderRelease: (e, gestureState) => {
                     if (gestureState.dy > 50) {
-                        fetchData();
+                        (async () => {
+                            try {
+                                await fetchEvents();
+                            } catch (error) {
+                                console.error('error', error);
+                            }
+                        })();
                     }
                 },
             })
         );
-    }, [activeTab]);
+    },[]);
 
     const handleSubmit = () => {
         //
         setModalVisible(false);
     };
 
-    const handleDelete = () => {
-        onDelete();
-        setModalDeleteVisible(false);
+    const handleDelete = async () => {
+        try {
+            await onDelete();
+            setModalDeleteVisible(false);
+            setLoading(true);
+        } catch (error) {
+            console.error('error', error);
+        }
     };
+
     const onDelete = async () => {
         try {
             const eventIdForDelete = await AsyncStorage.getItem('eventIdForDelete');
@@ -88,7 +129,7 @@ export default function MyEvents({navigation}) {
                 </View>
             </View>
             <View style={commonStyles.eventsMiddle} {...panResponder?.panHandlers}>
-                {isLoading ? (
+                {isLongLoading ? (
                     <ScrollView>
                         <Skeleton />
                         <Skeleton />
@@ -112,6 +153,7 @@ export default function MyEvents({navigation}) {
                         isVisible={isModalVisible}
                         onClose={() => setModalVisible(false)}
                         onSubmit={handleSubmit}
+                        setLoading={setLoading}
                     />
                     <ModalDelete
                         isVisible={isModalDeleteVisible}

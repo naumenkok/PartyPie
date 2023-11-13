@@ -1,8 +1,8 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {Modal, View, Text, TouchableOpacity, StyleSheet, TextInput, Button} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Modal, View, Text, TouchableOpacity, TextInput} from 'react-native';
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faCircleXmark} from "@fortawesome/free-regular-svg-icons";
-import { commonStyles } from '../styles/styles.js';
+import {commonStyles} from '../styles/styles.js';
 import {modalStyles} from "../styles/modalWindowsStyle";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {COLORS} from "../constants/theme";
@@ -11,7 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {createNewEvent} from "../services/api";
 
 
-export default function ModalCreateEvent ({ isVisible, onClose }) {
+export default function ModalCreateEvent({isVisible, onClose, setLoading}) {
     const [eventName, setEventName] = useState('');
     const [selectedType, setSelectedType] = useState('');
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -33,7 +33,7 @@ export default function ModalCreateEvent ({ isVisible, onClose }) {
 
     const handleCreateEvent = async () => {
         const creator_id = await AsyncStorage.getItem('userId');
-        if (isError){
+        if (isError) {
             return;
         }
         const eventData = {
@@ -45,10 +45,12 @@ export default function ModalCreateEvent ({ isVisible, onClose }) {
 
         try {
             const response = await createNewEvent(eventData);
-            console.log('Nowe wydarzenie zostało utworzone:', response);
+            console.log('Successfully created:', response);
             onClose();
         } catch (error) {
-            console.error('Błąd przy tworzeniu wydarzenia:', error);
+            console.error('Error in createNewEvent:', error);
+        } finally {
+            setLoading(true);
         }
     };
 
@@ -86,7 +88,7 @@ export default function ModalCreateEvent ({ isVisible, onClose }) {
                     <View style={modalStyles.button}>
                         <Text style={modalStyles.modalText}>{selectedDate.toDateString()}</Text>
                     </View>
-                    <TouchableOpacity onPress={showDatePicker}  style={[modalStyles.input, modalStyles.inputSmall]}>
+                    <TouchableOpacity onPress={showDatePicker} style={[modalStyles.input, modalStyles.inputSmall]}>
                         <Text style={[modalStyles.modalText, {color: COLORS.beaver}]}>Select a date</Text>
                     </TouchableOpacity>
                     <DateTimePickerModal

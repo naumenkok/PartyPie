@@ -13,7 +13,7 @@ export const authenticateUser = async (username, password) => {
         if (response.data && response.data.user_id) {
             return response.data.user_id;
         } else {
-            console.error('Error in data authenticateUser:', error);
+            console.error('Error in data authenticateUser:', response.data);
         }
     } catch (error) {
         console.error('Error in authenticateUser:', error);
@@ -27,7 +27,7 @@ export const getMyPastEvents = async (userId) => {
         if (response.data) {
             return response.data;
         } else {
-            console.error('Error in data getMyPastEvents:', error);
+            console.error('Error in data getMyPastEvents:', response.data);
         }
     } catch (error) {
         console.error('Error in getMyPastEvents:', error);
@@ -41,7 +41,7 @@ export const getMyFutureEvents = async (userId) => {
         if (response.data) {
             return response.data;
         } else {
-            console.error('Error in data getMyPastEvents:', error);
+            console.error('Error in data getMyPastEvents:', response.data);
         }
     } catch (error) {
         console.error('Error in getMyPastEvents:', error);
@@ -55,7 +55,7 @@ export const getPastEvents = async (userId) => {
         if (response.data) {
             return response.data;
         } else {
-            console.error('Error in data getMyPastEvents:', error);
+            console.error('Error in data getMyPastEvents:', response.data);
         }
     } catch (error) {
         console.error('Error in getMyPastEvents:', error);
@@ -69,7 +69,7 @@ export const getFutureEvents = async (userId) => {
         if (response.data) {
             return response.data;
         } else {
-            console.error('Error in data getMyPastEvents:', error);
+            console.error('Error in data getMyPastEvents:', response.data);
         }
     } catch (error) {
         console.error('Error in getMyPastEvents:', error);
@@ -83,7 +83,7 @@ export const getUsernameByID = async (userId) => {
         if (response.data) {
             return response.data[0].username;
         } else {
-            console.error('Error in data getUsernameByID:', error);
+            console.error('Error in data getUsernameByID:', response.data);
         }
     } catch (error) {
         console.error('Error in getUsernameByID:', error);
@@ -97,7 +97,7 @@ export const getEventByEventId = async (eventId) => {
         if (response.data) {
             return response.data[0];
         } else {
-            console.error('Error in data getEventByEventId:', error);
+            console.error('Error in data getEventByEventId:', response.data);
         }
     } catch (error) {
         console.error('Error in getEventByEventId:', error);
@@ -134,20 +134,6 @@ export const deleteEventByEventId = async (eventId) => {
         }
     } catch (error) {
         console.error('Error in deleteEventByEventId2:', error);
-    }
-};
-
-export const getPostsByEventId = async (eventId) => {
-    try {
-        const response = await axios.get(
-            `${BASE_URL}/postRoute/posts/${eventId}`);
-        if (response.data) {
-            return response.data;
-        } else {
-            console.error('Error in data getPostsByEventId:', error);
-        }
-    } catch (error) {
-        console.error('Error in getPostsByEventIds:', error);
     }
 };
 

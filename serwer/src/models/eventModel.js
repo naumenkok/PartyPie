@@ -81,7 +81,7 @@ class Event {
 
     static generateRandomCode() {
         const codeLength = 5;
-        const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         let code = '';
         for (let i = 0; i < codeLength; i++) {
             const randomIndex = Math.floor(Math.random() * charset.length);

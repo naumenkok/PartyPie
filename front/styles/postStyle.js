@@ -24,7 +24,13 @@ export const postStyle = StyleSheet.create({
     },
     text:{
         fontFamily: FONTS.regular,
+        fontSize: 16,
+    },
+    inputText:{
+        fontFamily: FONTS.regular,
         fontSize: 15,
+        marginRight: 30,
+        alignSelf: 'center',
     },
     name:{
         textTransform: 'capitalize',
@@ -33,5 +39,31 @@ export const postStyle = StyleSheet.create({
     },
     postText:{
         color:COLORS.greendark,
+    },
+    input:{
+        marginVertical: 5,
+        padding: 7,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 5,
+        borderColor: COLORS.green,
+        borderRadius: 20,
+    },
+    icon:{
+        position: 'absolute',
+        right: 10,
+        bottom: 5,
+        paddingLeft: 10,
+    },
+    photo:{
+        position: 'absolute',
+        right: 0,
+        paddingLeft: 10,
+    },
+    comment:{
+        position: 'absolute',
+        right: 35,
+        paddingLeft: 10,
     },
 });

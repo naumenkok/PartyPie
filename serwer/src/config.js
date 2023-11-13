@@ -8,6 +8,7 @@ module.exports = {
         user: process.env.DB_LOGIN,
         password: process.env.DB_PASSWORD,
         database: 'partypiedb',
+        timezone: 'utc',
         port: 3306,
         ssl: {
             ca: fs.readFileSync(path.join(__dirname, 'DigiCertGlobalRootCA.crt.pem'))

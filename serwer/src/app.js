@@ -8,6 +8,10 @@ const mysql = require('mysql');
 const db = require('./config');
 const bodyParser = require("body-parser");
 const port = process.env.PORT || 3000;
+const moment = require('moment-timezone');
+
+moment.tz.setDefault('UTC');
+
 
 const connection = mysql.createConnection(db.database);
 app.use(bodyParser.urlencoded({ extended: true }));

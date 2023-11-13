@@ -44,19 +44,17 @@ export const eventPageStyle = StyleSheet.create({
             alignSelf: 'stretch',
         },
         scrollBox1:{
-            height: 50,
+            height: 70,
             width: '100%',
-            alignItems: 'flex-end',
+            alignItems: 'stretch',
+            justifyContent: 'center',
             alignSelf: 'stretch',
-            backgroundColor: 'pink',
         },
         scrollBox2:{
             height: 120,
-            backgroundColor: 'blue',
             width: '100%',
         },
         scrollBox3:{
-            //height: 30,
             width: '100%',
         },
 });
