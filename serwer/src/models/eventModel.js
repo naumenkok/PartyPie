@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const db = require('../config');
+const moment = require('moment');
 const connection = mysql.createConnection(db.database);
 
 class Event {
@@ -49,6 +50,26 @@ class Event {
                 callback(err, null);
             } else {
                 callback(null, data);
+            }
+        });
+    }
+
+    static getDaysUntilEvent(eventId, callback) {
+        moment.tz.setDefault('UTC');
+
+        const query = "SELECT date FROM Events WHERE event_id = ?";
+        connection.query(query, eventId, (err, eventDate) => {
+            if (err) {
+                console.error('Error in SQL query', err);
+                callback(err, null);
+            } else {
+                const eventDateString = eventDate[0].date;
+                const currentDate = moment();
+                const eventDateMoment = moment(eventDateString, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
+                const currentDateStartOfDay = currentDate.clone().startOf('day');
+                const eventDateStartOfDay = eventDateMoment.clone().startOf('day');
+                const daysUntilEvent = eventDateStartOfDay.diff(currentDateStartOfDay, 'days');
+                callback(null, daysUntilEvent);
             }
         });
     }

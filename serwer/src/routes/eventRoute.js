@@ -8,6 +8,7 @@ router.get('/user/:userId/future-events', EventController.getFutureMyEventsByUse
 router.get('/event/:eventId', EventController.getEventsByEventId);
 router.post('/event/addNew', EventController.addEvent);
 router.delete('/event/delete/:eventId', EventController.deleteEventByEventId);
+router.get('/event/daysUntil/:eventId', EventController.getDaysUntilEvent);
 
 
 

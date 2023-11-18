@@ -13,6 +13,7 @@ export const topBarStyle = StyleSheet.create({
         backgroundColor: COLORS.white,
         borderRadius: 20,
         marginHorizontal: 10,
+        marginBottom: 5,
     },
     text: {
         fontSize: 14,
@@ -25,7 +26,7 @@ export const topBarStyle = StyleSheet.create({
         alignSelf: 'stretch',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderRadius: 20,
+        borderRadius: 14,
         paddingVertical: 5,
         paddingLeft: 10,
         paddingRight: 13,

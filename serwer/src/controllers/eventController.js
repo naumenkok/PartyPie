@@ -83,3 +83,16 @@ exports.deleteEventByEventId = (req, res) => {
         }
     });
 };
+
+exports.getDaysUntilEvent = (req, res) => {
+    const eventId = req.params.eventId;
+
+    Event.getDaysUntilEvent(eventId, (err, daysUntilEvent) => {
+        if (err) {
+            console.error('Error in controller:', err);
+            res.status(500).json({ error: 'Error retrieving days until event' });
+        } else {
+            res.status(200).json(daysUntilEvent);
+        }
+    });
+};

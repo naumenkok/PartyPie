@@ -16,7 +16,8 @@ export default function EventsItem({ navigation, backgroundColor, event_id, name
         try {
             await AsyncStorage.setItem('eventId', eventId.toString());
             console.log("saved eventId");
-            navigation.navigate('EventPage');
+            setModalVisible && navigation.navigate('EventPageForCreator');
+            !setModalVisible && navigation.navigate('EventPage');
         } catch (error) {
             console.error(error);
         }

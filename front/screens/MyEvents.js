@@ -7,7 +7,7 @@ import {LinearGradient} from "expo-linear-gradient";
 import EventsItem from "../components/EventsItem";
 import TabButton from "../components/TabButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getMyPastEvents, getMyFutureEvents, deleteEventByEventId} from "../services/api";
+import {getMyPastEvents, getMyFutureEvents, deleteEventByEventId} from "../services/apiEvent";
 import Skeleton from "../components/Skeleton";
 import ModalCreateEvent from "../components/ModalCreateEvent";
 import ModalDelete from "../components/ModalDelete";

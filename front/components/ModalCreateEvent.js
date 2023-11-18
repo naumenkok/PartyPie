@@ -8,7 +8,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {COLORS} from "../constants/theme";
 import TypeList from "./TypeList";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {createNewEvent} from "../services/api";
+import {createNewEvent} from "../services/apiEvent";
 
 
 export default function ModalCreateEvent({isVisible, onClose, setLoading}) {
