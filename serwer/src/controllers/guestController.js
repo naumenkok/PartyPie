@@ -41,3 +41,17 @@ exports.getFutureEventsByGuestId = (req, res) => {
         }
     });
 };
+
+exports.addGuest = (req, res) => {
+    const { user_id, code } = req.body;
+
+    Guest.addGuest(user_id, code, (err, data) => {
+        if (err) {
+            console.error('Error in controller:', err);
+            res.status(500).json({ error: 'Error adding guest' });
+        } else {
+            res.status(201).json({ message: 'Guest added successfully' });
+        }
+    });
+};
+

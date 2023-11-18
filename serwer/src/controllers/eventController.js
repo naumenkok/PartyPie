@@ -40,3 +40,59 @@ exports.getFutureMyEventsByUserId = (req, res) => {
     });
 };
 
+exports.getEventsByEventId = (req, res) => {
+    const eventId = req.params.eventId;
+
+    Event.getEventsByEventId(eventId, (err, data) => {
+        if (err) {
+            console.error('Error in controller:', err);
+            res.status(500).json({ error: 'Error retrieving events data' });
+        } else {
+            res.status(200).json(data);
+        }
+    });
+};
+
+exports.addEvent = (req, res) => {
+    const eventData = {
+        creator_id: req.body.creator_id,
+        name: req.body.name,
+        type: req.body.type,
+        date: req.body.date
+    };
+
+    Event.addEvent(eventData, (err, data) => {
+        if (err) {
+            console.error('Error in controller:', err);
+            res.status(500).json({ error: 'Error adding event' });
+        } else {
+            res.status(201).json({ message: 'Event added successfully' });
+        }
+    });
+};
+
+exports.deleteEventByEventId = (req, res) => {
+    const eventId = req.params.eventId;
+
+    Event.deleteEventByEventId(eventId, (err, data) => {
+        if (err) {
+            console.error('Error in controller:', err);
+            res.status(500).json({ error: 'Error deleting the event' });
+        } else {
+            res.status(200).json({ message: 'Event deleted successfully' });
+        }
+    });
+};
+
+exports.getDaysUntilEvent = (req, res) => {
+    const eventId = req.params.eventId;
+
+    Event.getDaysUntilEvent(eventId, (err, daysUntilEvent) => {
+        if (err) {
+            console.error('Error in controller:', err);
+            res.status(500).json({ error: 'Error retrieving days until event' });
+        } else {
+            res.status(200).json(daysUntilEvent);
+        }
+    });
+};

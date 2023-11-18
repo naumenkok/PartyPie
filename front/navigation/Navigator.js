@@ -9,6 +9,8 @@ import Events from "../screens/Events";
 import MyEvents from "../screens/MyEvents";
 import Profile from "../screens/Profile";
 import BottomTabBar from "../components/BottomTab";
+import EventPage from "../screens/EventPage";
+import EventPageForCreator from "../screens/EventPageForCreator";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -56,6 +58,16 @@ const StackNavigator = () => {
             <Stack.Screen
                 name="Events"
                 component={Events}
+                options={{headerShown: false, animation: 'none'}}
+            />
+            <Stack.Screen
+                name="EventPage"
+                component={EventPage}
+                options={{headerShown: false, animation: 'none'}}
+            />
+            <Stack.Screen
+                name="EventPageForCreator"
+                component={EventPageForCreator}
                 options={{headerShown: false, animation: 'none'}}
             />
             <Stack.Screen

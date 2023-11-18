@@ -26,6 +26,19 @@ exports.getUserById = (req, res) => {
     });
 };
 
+exports.getUsernameById = (req, res) => {
+    const userId = req.params.userId;
+
+    User.getUsernameById(userId, (err, user) => {
+        if (err) {
+            console.error('Error in controller:', err);
+            res.status(500).json({ error: 'Error retrieving user' });
+        } else {
+            res.status(200).json(user);
+        }
+    });
+};
+
 exports.getAllUsers = (req, res) => {
     User.getAllUsers((err, users) => {
         if (err) {

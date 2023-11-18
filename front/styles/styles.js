@@ -8,6 +8,19 @@ export const commonStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'stretch',
     },
+    loadingView:{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: COLORS.beige,
+    },
+    empty: {
+        flex: 1,
+        resizeMode: 'cover',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        backgroundColor: COLORS.beige
+    },
 
     //img for welcome screen
     logo: {
@@ -33,7 +46,7 @@ export const commonStyles = StyleSheet.create({
         top: 40,
         left: 3,
     },
-    bowtie:{
+    bowtie: {
         top: 75,
         right: 30,
     },
@@ -53,13 +66,13 @@ export const commonStyles = StyleSheet.create({
         top: 65,
         right: 35,
     },
-    icon:{
+    icon: {
         left: 65,
         color: COLORS.beaver,
     },
 
     //text
-    text:{
+    text: {
         fontSize: 30,
         margin: 5,
         color: COLORS.white,
@@ -74,16 +87,17 @@ export const commonStyles = StyleSheet.create({
     textInactive: {
         opacity: 0.7,
     },
-    textSmall:{
+    textSmall: {
         color: COLORS.beige,
         alignSelf: 'flex-start',
         left: 40,
         fontSize: 16,
     },
-    name:{
+    name: {
         fontSize: 30,
         textTransform: 'uppercase',
-        color:COLORS.orange,
+        color: COLORS.orange,
+        textAlign: 'center',
         fontFamily: FONTS.unique,
         marginVertical: 10,
     },
@@ -104,7 +118,7 @@ export const commonStyles = StyleSheet.create({
         borderColor: COLORS.white,
         borderRadius: 20,
     },
-    buttonProfile:{
+    buttonProfile: {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
@@ -117,7 +131,7 @@ export const commonStyles = StyleSheet.create({
         borderColor: COLORS.coral,
         borderRadius: 20,
     },
-    buttonProfileLogOut:{
+    buttonProfileLogOut: {
         alignSelf: 'flex-end',
         marginHorizontal: -10,
         borderColor: COLORS.greendark,
@@ -127,7 +141,7 @@ export const commonStyles = StyleSheet.create({
         height: 50,
         width: 100,
     },
-    buttonGradient:{
+    buttonGradient: {
         height: 47,
         width: 250,
         marginVertical: 20,
@@ -137,7 +151,7 @@ export const commonStyles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 20,
     },
-    input:{
+    input: {
         height: 47,
         marginVertical: 5,
         marginHorizontal: 30,
@@ -151,7 +165,7 @@ export const commonStyles = StyleSheet.create({
         backgroundColor: COLORS.white,
         opacity: 0.6,
     },
-    password:{
+    password: {
         left: (Platform.OS === 'ios') ? 10 : 30,
     },
     bottomTabBar: {
@@ -185,28 +199,28 @@ export const commonStyles = StyleSheet.create({
         alignItems: 'center',
         top: 20,
     },
-    eventsTop:{
+    eventsTop: {
         flex: 3.1,
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
-    eventsMiddle:{
+    eventsMiddle: {
         flex: 12.9,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    eventsBottom:{
+    eventsBottom: {
         flex: 1.3,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    profileTop:{
+    profileTop: {
         flex: 1,
-        alignItems: 'flex-start',
-        justifyContent: 'flex-end',
+        alignItems: 'center',
+        justifyContent: 'center',
         marginHorizontal: 60,
     },
-    profileBottom:{
+    profileBottom: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-start',
@@ -218,12 +232,12 @@ export const commonStyles = StyleSheet.create({
         justifyContent: 'space-evenly',
         alignItems: 'center',
     },
-    viewBackground:{
+    viewBackground: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'stretch',
     },
-    blur:{
+    blur: {
         height: '100%',
         width: '100%',
     },

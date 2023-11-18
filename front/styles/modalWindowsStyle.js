@@ -12,7 +12,14 @@ export const modalStyles = StyleSheet.create({
     modalText: {
         fontSize: 16,
         fontWeight: 'bold',
-        marginBottom: 20,
+        margin: 5,
+    },
+    textError: {
+        fontFamily: FONTS.regular,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: COLORS.red,
+        margin: 5,
     },
     modalContainer: {
         flex: 1,
@@ -35,6 +42,7 @@ export const modalStyles = StyleSheet.create({
     },
     submitButton: {
         backgroundColor: COLORS.coral,
+        marginVertical: 5,
         padding: 10,
         borderRadius: 10,
     },
@@ -61,5 +69,31 @@ export const modalStyles = StyleSheet.create({
     },
     focusCell: {
         borderColor: '#000',
+    },
+    input:{
+        height: 55,
+        margin: 5,
+        alignSelf: 'stretch',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 5,
+        borderColor: COLORS.orange,
+        borderRadius: 20,
+        backgroundColor: COLORS.white,
+        opacity: 0.6,
+    },
+    inputSmall:{
+        width: "auto",
+        paddingHorizontal: 10,
+        alignSelf: "auto",
+    },
+    button:{
+        margin: 5,
+        alignSelf: 'stretch',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: 0.6,
     },
 });
