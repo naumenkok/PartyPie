@@ -1,6 +1,5 @@
 const Event = require('../models/eventModel');
 
-
 exports.getMyEventsByUserId = (req, res) => {
     const userId = req.params.userId;
 
@@ -84,15 +83,54 @@ exports.deleteEventByEventId = (req, res) => {
     });
 };
 
-exports.getDaysUntilEvent = (req, res) => {
-    const eventId = req.params.eventId;
+exports.getDaysUntilEvent = async (req, res) => {
+    try {
+        const eventId = req.params.eventId;
+        const daysUntilEvent = await Event.getDaysUntilEvent(eventId);
+        res.status(200).json(daysUntilEvent);
+    } catch (err) {
+        console.error('Error in controller:', err);
+        res.status(500).json({ error: 'Error retrieving days until event' });
+    }
+};
 
-    Event.getDaysUntilEvent(eventId, (err, daysUntilEvent) => {
+exports.updateEventName = (req, res) => {
+    const eventId = req.body.eventId;
+    const newName = req.body.newName;
+
+    Event.updateEventName(eventId, newName, (err, data) => {
         if (err) {
             console.error('Error in controller:', err);
-            res.status(500).json({ error: 'Error retrieving days until event' });
+            res.status(500).json({ error: 'Error updating event name' });
         } else {
-            res.status(200).json(daysUntilEvent);
+            res.status(200).json({ message: 'Event name updated successfully' });
+        }
+    });
+};
+
+exports.updateEventPhotoLink = (req, res) => {
+    const eventId = req.body.eventId;
+    const newLink = req.body.newLink;
+
+    Event.updateEventPhotoLink(eventId, newLink, (err, data) => {
+        if (err) {
+            console.error('Error in controller:', err);
+            res.status(500).json({ error: 'Error updating event link' });
+        } else {
+            res.status(200).json({ message: 'Event link updated successfully' });
+        }
+    });
+};
+
+exports.updateEventInfo = (req, res) => {
+    const { eventId, country, city, street, house, date } = req.body;
+
+    Event.updateEventInfo(eventId, country, city, street, house, date, (err, data) => {
+        if (err) {
+            console.error('Error in controller:', err);
+            res.status(500).json({ error: 'Error updating event information' });
+        } else {
+            res.status(200).json({ message: 'Event information updated successfully' });
         }
     });
 };

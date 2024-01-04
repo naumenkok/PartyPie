@@ -34,6 +34,31 @@ class Wishlist {
             }
         });
     }
+
+    static updateWishlistItem(wishId, newName, newLink, callback) {
+        const query = "UPDATE wishlist SET name = ?, link = ? WHERE wish_id = ?";
+        connection.query(query, [newName, newLink, wishId], (err, result) => {
+            if (err) {
+                console.error('Error in SQL query', err);
+                callback(err, null);
+            } else {
+                callback(null, result);
+            }
+        });
+    }
+
+    static deleteWishlistItem(wishId, callback) {
+        const query = "DELETE FROM wishlist WHERE wish_id = ?";
+        connection.query(query, [wishId], (err, result) => {
+            if (err) {
+                console.error('Error in SQL query', err);
+                callback(err, null);
+            } else {
+                callback(null, result);
+            }
+        });
+    }
+
 }
 
 module.exports = Wishlist;

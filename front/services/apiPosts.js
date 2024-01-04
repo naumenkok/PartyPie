@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const BASE_URL = 'http://192.168.1.17:3000';
+// const BASE_URL = 'http://172.20.10.9:3000';
 
 export const getPostsByEventId = async (eventId) => {
     try {
@@ -30,7 +31,7 @@ export const getCommentsByPostId = async (postId) => {
     }
 };
 
-export const addComment = async (post_id, user_id, text) => {
+export const addComment = async (post_id, user_id, text, image) => {
     try {
         const response = await axios.post(
             `${BASE_URL}/postRoute/comments/add`,
@@ -38,6 +39,7 @@ export const addComment = async (post_id, user_id, text) => {
                 postId: post_id,
                 userId: user_id,
                 text: text,
+                image: image,
             }
         );
         if (response.data) {
@@ -50,7 +52,7 @@ export const addComment = async (post_id, user_id, text) => {
     }
 };
 
-export const addPost = async (event_id, user_id, text) => {
+export const addPost = async (event_id, user_id, text, image) => {
     try {
         const response = await axios.post(
             `${BASE_URL}/postRoute/posts/add`,
@@ -58,6 +60,7 @@ export const addPost = async (event_id, user_id, text) => {
                 eventId: event_id,
                 userId: user_id,
                 text: text,
+                image: image,
             }
         );
         if (response.data) {

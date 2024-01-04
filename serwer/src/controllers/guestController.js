@@ -1,6 +1,4 @@
 const Guest = require('../models/guestModel');
-const Event = require("../models/eventModel");
-
 
 exports.getEventsByGuestId = (req, res) => {
     const userId = req.params.userId;
@@ -50,7 +48,7 @@ exports.addGuest = (req, res) => {
             console.error('Error in controller:', err);
             res.status(500).json({ error: 'Error adding guest' });
         } else {
-            res.status(201).json({ message: 'Guest added successfully' });
+            res.status(201).json({ event_id: data });
         }
     });
 };

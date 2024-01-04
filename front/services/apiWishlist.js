@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const BASE_URL = 'http://192.168.1.17:3000';
+// const BASE_URL = 'http://172.20.10.9:3000';
 
 export const getWishesByEventId = async (eventId) => {
     try {

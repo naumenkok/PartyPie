@@ -18,7 +18,7 @@ export const modalStyles = StyleSheet.create({
         fontFamily: FONTS.regular,
         fontSize: 16,
         fontWeight: 'bold',
-        color: COLORS.red,
+        color: "#FF003C",
         margin: 5,
     },
     modalContainer: {
@@ -78,10 +78,10 @@ export const modalStyles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 5,
-        borderColor: COLORS.orange,
+        borderColor: COLORS.coral,
         borderRadius: 20,
         backgroundColor: COLORS.white,
-        opacity: 0.6,
+        opacity: 1,
     },
     inputSmall:{
         width: "auto",

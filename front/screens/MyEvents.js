@@ -4,13 +4,13 @@ import { commonStyles } from '../styles/styles.js';
 import constants from '../constants/img.js';
 import {COLORS} from "../constants/theme";
 import {LinearGradient} from "expo-linear-gradient";
-import EventsItem from "../components/EventsItem";
+import EventsItem from "../components/smallComponents/EventsItem";
 import TabButton from "../components/TabButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getMyPastEvents, getMyFutureEvents, deleteEventByEventId} from "../services/apiEvent";
 import Skeleton from "../components/Skeleton";
-import ModalCreateEvent from "../components/ModalCreateEvent";
-import ModalDelete from "../components/ModalDelete";
+import ModalCreateEvent from "../components/modalComponents/ModalCreateEvent";
+import ModalDelete from "../components/modalComponents/ModalDelete";
 
 export default function MyEvents({navigation}) {
     const [activeTab, setActiveTab] = useState("Upcoming");

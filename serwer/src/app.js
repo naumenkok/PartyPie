@@ -5,6 +5,8 @@ const eventRoutes = require('./routes/eventRoute');
 const guestRoute = require('./routes/guestRoute');
 const postRoute = require('./routes/postRoute');
 const wishlistRoute = require('./routes/wishlistRoute');
+const taskRoute = require('./routes/taskRoute');
+const budgetRoute = require('./routes/budgetRoute');
 const mysql = require('mysql');
 const db = require('./config');
 const bodyParser = require("body-parser");
@@ -30,6 +32,8 @@ app.use('/eventRoute', eventRoutes);
 app.use('/guestRoute', guestRoute);
 app.use('/postRoute', postRoute);
 app.use('/wishlistRoute', wishlistRoute);
+app.use('/taskRoute', taskRoute);
+app.use('/budgetRoute', budgetRoute);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

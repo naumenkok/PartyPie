@@ -112,9 +112,75 @@ export const getDaysUntilEvent = async (eventId) => {
         if (response.data) {
             return response.data;
         } else {
-            console.error('Error in data getDaysUntilEvent:', response.data);
+            return response.data;
+            console.log('Error in data getDaysUntilEvent:', response.data);
         }
     } catch (error) {
         console.error('Error in getDaysUntilEvent:', error);
+    }
+};
+
+export const updateEventName = async (eventId, newName) => {
+    try {
+        const response = await axios.put(
+            `${BASE_URL}/eventRoute/event/updateName`,
+            {
+                eventId: eventId,
+                newName: newName,
+            }
+        );
+
+        if (response.data) {
+            console.log('Event name updated successfully');
+        } else {
+            console.error('Error in data updateEventName:', response.data);
+        }
+    } catch (error) {
+        console.error('Error in updateEventName:', error);
+    }
+};
+
+export const updateEventLink = async (eventId, newLink) => {
+    try {
+        const response = await axios.put(
+            `${BASE_URL}/eventRoute/event/updateLink`,
+            {
+                eventId: eventId,
+                newLink: newLink,
+            }
+        );
+
+        if (response.data) {
+            console.log('Event link updated successfully');
+        } else {
+            console.error('Error in data updateEventLink:', response.data);
+        }
+    } catch (error) {
+        console.error('Error in updateEventLink:', error);
+    }
+};
+
+
+export const updateEventInfo = async (eventId, country, city, street, house, date) => {
+    try {
+        const response = await axios.put(
+            `${BASE_URL}/eventRoute/event/updateInfo`,
+            {
+                eventId: eventId,
+                country: country,
+                city: city,
+                street: street,
+                house: house,
+                date: date,
+            }
+        );
+
+        if (response.data) {
+            console.log('Event information updated successfully');
+        } else {
+            console.error('Error in data updateEventInfo:', response.data);
+        }
+    } catch (error) {
+        console.error('Error in updateEventInfo:', error);
     }
 };

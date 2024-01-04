@@ -148,7 +148,7 @@ export default function TopBar({ activeTab, setActiveTab, event }) {
                 </View>)}
 
             {activeTab === "Gift" && (<View style={{marginBottom: 5}}>
-                <WishListComponent event={event}/>
+                <WishListComponent event={event} screen={"Guest"}/>
             </View>)}
 
             {activeTab === "Images" && (
@@ -159,7 +159,7 @@ export default function TopBar({ activeTab, setActiveTab, event }) {
                                     <FontAwesomeIcon icon={faImages} size={30} color={COLORS.orange}/>
                                     <Text style={[eventPageStyle.text, {color: COLORS.red}]}>Want to see our photo? </Text>
                                 </View>
-                                <Text style={[eventPageStyle.text, {color: COLORS.orange}]} onPress={handleLinkPress}>Click here!</Text>
+                                <Text style={[eventPageStyle.text, {color: COLORS.orange, textDecorationLine: 'underline'}]} onPress={handleLinkPress}>Click here!</Text>
                             </View>):
                         (<View>
                             <Text style={[eventPageStyle.text, {color: COLORS.orange}]}>No photo yet :(</Text>

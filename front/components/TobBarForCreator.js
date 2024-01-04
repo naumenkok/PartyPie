@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, TouchableOpacity, Text} from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faHome, faEnvelope, faListCheck, faSackDollar, faUserGroup, faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faEnvelope, faListCheck, faSackDollar, faGift, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import {COLORS} from "../constants/theme";
 import {topBarStyle} from "../styles/topBarStyle";
 
@@ -25,7 +25,7 @@ export default function TopBarForCreator({ activeTab, setActiveTab }) {
                         return COLORS.pink;
                     case 'Users':
                         return COLORS.orange;
-                    case 'Inspiration':
+                    case 'Wishlist':
                         return COLORS.red;
                 }
             })()
@@ -46,7 +46,7 @@ export default function TopBarForCreator({ activeTab, setActiveTab }) {
                         return COLORS.pink;
                     case 'Users':
                         return COLORS.orange;
-                    case 'Inspiration':
+                    case 'Wishlist':
                         return COLORS.red;
                 }
             })()
@@ -79,9 +79,9 @@ export default function TopBarForCreator({ activeTab, setActiveTab }) {
                 <FontAwesomeIcon icon={faUserGroup} size={getIconSize('Users')} style={{ color: getColor('Users') }} />
                 {activeTab === "Users" && <Text style={[topBarStyle.text, getTextStyle('Users')]}>Guests</Text>}
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>{setActiveTab('Inspiration')}} style={[topBarStyle.button, {backgroundColor:getBackgroundColor('Inspiration')}]}>
-                <FontAwesomeIcon icon={faLightbulb} size={getIconSize('Inspiration')} style={{ color: getColor('Inspiration') }} />
-                {activeTab === "Inspiration" && <Text style={[topBarStyle.text, getTextStyle('Inspiration')]}>Ideas</Text>}
+            <TouchableOpacity onPress={()=>{setActiveTab('Wishlist')}} style={[topBarStyle.button, {backgroundColor:getBackgroundColor('Wishlist')}]}>
+                <FontAwesomeIcon icon={faGift} size={getIconSize('Wishlist')} style={{ color: getColor('Wishlist') }} />
+                {activeTab === "Wishlist" && <Text style={[topBarStyle.text, getTextStyle('Wishlist')]}>Wishlist</Text>}
             </TouchableOpacity>
         </View>
     );

@@ -3,9 +3,9 @@ import {View, ImageBackground, TouchableOpacity, Text, ScrollView, PanResponder}
 import {commonStyles} from '../styles/styles.js';
 import {LinearGradient} from "expo-linear-gradient";
 import {COLORS} from "../constants/theme";
-import EventsItem from "../components/EventsItem";
+import EventsItem from "../components/smallComponents/EventsItem";
 import constants from "../constants/img";
-import ModalWindow from "../components/ModalAddEventScreen";
+import ModalWindow from "../components/modalComponents/ModalAddEventScreen";
 import TabButton from "../components/TabButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {addGuest,} from "../services/api";
@@ -16,10 +16,10 @@ export default function Events({navigation}) {
     const [activeTab, setActiveTab] = useState("Upcoming");
     const [isModalVisible, setModalVisible] = useState(false);
     const [events, setEvents] = useState([]);
-    ;
     const [isLoading, setLoading] = useState(false);
     const [isLongLoading, setLongLoading] = useState(true);
     const [panResponder, setPanResponder] = useState(null);
+    const [isCorrectCode, setCorrectCode] = useState(false);
     const eventColors = [COLORS.redcoral, COLORS.orange, COLORS.pink, COLORS.red, COLORS.redcoral];
 
     const delay = ms => new Promise(
@@ -52,9 +52,12 @@ export default function Events({navigation}) {
         try {
             const userId = await AsyncStorage.getItem('userId');
             const code = await AsyncStorage.getItem('code');
-            await addGuest(userId, code);
+            const data = await addGuest(userId, code);
+            const isCorrect = await data && data.event_id !== null && typeof data.event_id === "object";
+            return isCorrect;
         } catch (error) {
             console.error(error);
+            return;
         }
     };
 
@@ -97,11 +100,11 @@ export default function Events({navigation}) {
         );
     }, [activeTab]);
 
-    const handleSubmit = () => {
-        fetchAddGuest().then(() => {
-            setModalVisible(false);
-            setLoading(true);
-        });
+    const handleSubmit = async () => {
+        const isCorrect = await fetchAddGuest();
+        setCorrectCode(isCorrect);
+        if (isCorrect) {setModalVisible(false)};
+        setLoading(true);
     };
 
     return (
@@ -145,6 +148,7 @@ export default function Events({navigation}) {
                 )}
                 <ModalWindow
                     isVisible={isModalVisible}
+                    isCorrect={isCorrectCode}
                     onClose={() => setModalVisible(false)}
                     onSubmit={handleSubmit}
                 />
@@ -156,7 +160,7 @@ export default function Events({navigation}) {
                         style={commonStyles.buttonGradient}
                         start={{x: 0, y: 0}}
                         end={{x: 1, y: 0}}>
-                        <TouchableOpacity onPress={() => setModalVisible(true)}>
+                        <TouchableOpacity onPress={() => {setModalVisible(true)}}>
                             <View style={commonStyles.horizontal}>
                                 <Text style={[commonStyles.text, {fontSize: 24}]}>Add new</Text>
                             </View>

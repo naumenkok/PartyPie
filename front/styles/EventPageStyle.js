@@ -24,7 +24,6 @@ export const eventPageStyle = StyleSheet.create({
             textAlign: 'center',
             marginHorizontal: 30,
             color: COLORS.white,
-            textTransform: 'capitalize',
             fontFamily: FONTS.unique,
         },
         eventPageBottom:{
@@ -67,7 +66,7 @@ export const eventPageStyle = StyleSheet.create({
         containerWishlist:{
             justifyContent: 'center',
             alignSelf: 'stretch',
-            alignItems: 'flex-start',
+            alignItems: 'center',
             height: 'auto',
             padding: 10,
             borderWidth: 10,
@@ -107,5 +106,30 @@ export const eventPageStyle = StyleSheet.create({
             position: 'absolute',
             top: 5,
             right: 5,
+        },
+        addTask:{
+            flexDirection: 'column',
+            margin: 5,
+            alignSelf: 'stretch',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderWidth: 5,
+            borderColor: COLORS.coral,
+            borderRadius: 20,
+            backgroundColor: COLORS.white,
+            padding: 10,
+        },
+        containerTask: {
+            flexDirection: 'row',
+            alignSelf: 'stretch',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        button:{
+            borderRadius: 20,
+            borderWidth: 5,
+            borderColor: COLORS.red,
+            marginTop: 25,
+            paddingHorizontal: 20
         },
 });

@@ -5,7 +5,7 @@ const connection = mysql.createConnection(db.database);
 
 class Event {
     static getMyEventsByUserId(userId, callback) {
-        const query = "SELECT * FROM Events WHERE creator_id = ?";
+        const query = "SELECT * FROM Events WHERE creator_id = ? ORDER BY date";
         connection.query(query, [userId], (err, events) => {
             if (err) {
                 console.error('Error in SQL query', err);
@@ -18,7 +18,7 @@ class Event {
 
     static getPastMyEventsByUserId(userId, callback) {
         const currentDate = new Date();
-        const query = "SELECT * FROM Events WHERE creator_id = ? AND date < ?";
+        const query = "SELECT * FROM Events WHERE creator_id = ? AND date < ? ORDER BY date";
         connection.query(query, [userId, currentDate], (err, events) => {
             if (err) {
                 console.error('Error in SQL query', err);
@@ -31,7 +31,7 @@ class Event {
 
     static getFutureMyEventsByUserId(userId, callback) {
         const currentDate = new Date();
-        const query = "SELECT * FROM Events WHERE creator_id = ? AND date > ?";
+        const query = "SELECT * FROM Events WHERE creator_id = ? AND date > ? ORDER BY date";
         connection.query(query, [userId, currentDate], (err, events) => {
             if (err) {
                 console.error('Error in SQL query', err);
@@ -54,23 +54,25 @@ class Event {
         });
     }
 
-    static getDaysUntilEvent(eventId, callback) {
-        moment.tz.setDefault('UTC');
+    static getDaysUntilEvent(eventId) {
+        return new Promise((resolve, reject) => {
+            moment.tz.setDefault('UTC');
 
-        const query = "SELECT date FROM Events WHERE event_id = ?";
-        connection.query(query, eventId, (err, eventDate) => {
-            if (err) {
-                console.error('Error in SQL query', err);
-                callback(err, null);
-            } else {
-                const eventDateString = eventDate[0].date;
-                const currentDate = moment();
-                const eventDateMoment = moment(eventDateString, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
-                const currentDateStartOfDay = currentDate.clone().startOf('day');
-                const eventDateStartOfDay = eventDateMoment.clone().startOf('day');
-                const daysUntilEvent = eventDateStartOfDay.diff(currentDateStartOfDay, 'days');
-                callback(null, daysUntilEvent);
-            }
+            const query = "SELECT date FROM Events WHERE event_id = ?";
+            connection.query(query, eventId, (err, eventDate) => {
+                if (err) {
+                    console.error('Error in SQL query', err);
+                    reject(err);
+                } else {
+                    const eventDateString = eventDate[0].date;
+                    const currentDate = moment();
+                    const eventDateMoment = moment(eventDateString, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
+                    const currentDateStartOfDay = currentDate.clone().startOf('day');
+                    const eventDateStartOfDay = eventDateMoment.clone().startOf('day');
+                    const daysUntilEvent = eventDateStartOfDay.diff(currentDateStartOfDay, 'days');
+                    resolve(daysUntilEvent);
+                }
+            });
         });
     }
 
@@ -163,6 +165,42 @@ class Event {
                 callback(err, null);
             } else {
                 callback(null, result);
+            }
+        });
+    }
+
+    static updateEventName(eventId, newName, callback) {
+        const query = "UPDATE Events SET name = ? WHERE event_id = ?";
+        connection.query(query, [newName, eventId], (err, data) => {
+            if (err) {
+                console.error('Error in SQL query', err);
+                callback(err, null);
+            } else {
+                callback(null, data);
+            }
+        });
+    }
+
+    static updateEventPhotoLink(eventId, newLink, callback) {
+        const query = "UPDATE Events SET photo_link = ? WHERE event_id = ?";
+        connection.query(query, [newLink, eventId], (err, data) => {
+            if (err) {
+                console.error('Error in SQL query', err);
+                callback(err, null);
+            } else {
+                callback(null, data);
+            }
+        });
+    }
+
+    static updateEventInfo(eventId, country, city, street, house, date, callback) {
+        const query = "UPDATE Events SET country = ?, city = ?, street = ?, house = ?, date = ? WHERE event_id = ?";
+        connection.query(query, [country, city, street, house, date, eventId], (err, data) => {
+            if (err) {
+                console.error('Error in SQL query', err);
+                callback(err, null);
+            } else {
+                callback(null, data);
             }
         });
     }

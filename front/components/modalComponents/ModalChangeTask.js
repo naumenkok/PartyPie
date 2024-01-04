@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faCircleXmark} from "@fortawesome/free-regular-svg-icons";
-import { commonStyles } from '../styles/styles.js';
-import {modalStyles} from "../styles/modalWindowsStyle";
-import {COLORS} from "../constants/theme";
+import { commonStyles } from '../../styles/styles.js';
+import {modalStyles} from "../../styles/modalWindowsStyle";
+import {COLORS} from "../../constants/theme";
 
-export default function ModalDelete ({ isVisible, onClose, onSubmit }) {
+export default function ModalChangeTask ({ isVisible, onClose }) {
     return (
         <Modal
             visible={isVisible}
@@ -24,7 +24,7 @@ export default function ModalDelete ({ isVisible, onClose, onSubmit }) {
                     </TouchableOpacity>
                     <Text style={modalStyles.modalText}>Are you sure you want to delete an event?</Text>
                     <View style={commonStyles.horizontal}>
-                        <TouchableOpacity onPress={onSubmit} style={modalStyles.submitButton}>
+                        <TouchableOpacity onPress={()=>{}} style={modalStyles.submitButton}>
                             <Text style={modalStyles.submitButtonText}>YES</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={onClose} style={modalStyles.submitButton}>
