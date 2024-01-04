@@ -1,67 +1,52 @@
 const User = require('../models/userModel');
 
-exports.createUser = (req, res) => {
-    const newUser = req.body;
+exports.createUser = async (req, res) => {
+    const { name, surname, username, email, password } = req.body;
 
-    User.createUser(newUser, (err, userId) => {
-        if (err) {
-            console.error('Error in controller:', err);
-            res.status(500).json({ error: 'Error creating user' });
-        } else {
-            res.status(201).json({ user_id: userId });
-        }
-    });
+    try {
+        const userId = await User.createUser(name, surname, username, email, password);
+        res.status(201).json({ user_id: userId });
+    } catch (err) {
+        console.error('Error in controller:', err);
+        res.status(500).json({ error: 'Error creating user' });
+    }
 };
 
-exports.getUserById = (req, res) => {
-    const {userId} = req.query;
-
-    User.getUserById(userId, (err, user) => {
-        if (err) {
-            console.error('Error in controller:', err);
-            res.status(500).json({ error: 'Error retrieving user' });
-        } else {
-            res.status(200).json(user);
-        }
-    });
-};
-
-exports.getUsernameById = (req, res) => {
+exports.getUserById = async (req, res) => {
     const userId = req.params.userId;
 
-    User.getUsernameById(userId, (err, user) => {
-        if (err) {
-            console.error('Error in controller:', err);
-            res.status(500).json({ error: 'Error retrieving user' });
-        } else {
-            res.status(200).json(user);
-        }
-    });
+    try {
+        const user = await User.getUserById(userId);
+        res.status(200).json(user);
+    } catch (err) {
+        console.error('Error in controller:', err);
+        res.status(500).json({ error: 'Error retrieving user', err: err });
+    }
 };
 
-exports.getAllUsers = (req, res) => {
-    User.getAllUsers((err, users) => {
-        if (err) {
-            console.error('Error in controller:', err);
-            res.status(500).json({ error: 'Error retrieving users' });
-        } else {
-            res.status(200).json(users);
-        }
-    });
+exports.getAllUsers = async (req, res) => {
+    try {
+        const users = await User.getAllUsers();
+        res.status(200).json(users);
+    } catch (err) {
+        console.error('Error in controller:', err);
+        res.status(500).json({ error: 'Error retrieving users' });
+    }
 };
 
-exports.getUserByLoginAndPassword = (req, res) => {
+exports.getUserByLoginAndPassword = async (req, res) => {
     const { username, password } = req.body;
 
-    User.getUserByLoginAndPassword(username, password, (err, user) => {
-        if (err) {
-            console.error('Error in controller:', err);
-            res.status(500).json({ error: 'Error retrieving user' });
-        } else if (!user) {
-            res.status(401).json({ error: 'Invalid login or password' });
+    try {
+        const user = await User.getUserByLoginAndPassword(username, password);
+        if (!user) {
+            res.status(401).json({ user_id: null });
         } else {
             res.status(200).json({ user_id: user.user_id });
         }
-    });
+    } catch (err) {
+        console.error('Error in controller:', err);
+        res.status(500).json({ error: 'Error retrieving user' });
+    }
 };
 

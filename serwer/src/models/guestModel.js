@@ -23,6 +23,7 @@ class Guest {
               FROM Guests
               JOIN Events ON Guests.event_id = Events.event_id
               WHERE Guests.guest_id = ? AND Events.date < ? AND Guests.status = 'accepted'
+              ORDER BY Events.date
             `;
         connection.query(query, [userId, currentDate], (err, events) => {
             if (err) {
@@ -41,6 +42,7 @@ class Guest {
               FROM Guests
               JOIN Events ON Guests.event_id = Events.event_id
               WHERE Guests.guest_id = ? AND Events.date > ? AND Guests.status = 'accepted'
+              ORDER BY Events.date
             `;
         connection.query(query, [userId, currentDate], (err, events) => {
             if (err) {
@@ -58,17 +60,22 @@ class Guest {
                 callback(err, null);
                 return;
             }
-            const query = "INSERT INTO Guests (guest_id, event_id, status) VALUES (?, ?, ?)";
-            const status = "accepted";
-            const eventIdNum = eventId[0].event_id;
-            connection.query(query, [userId, eventIdNum, status], (err, events) => {
-                if (err) {
-                    console.error('Error in SQL query', err);
-                    callback(err, null);
-                } else {
-                    callback(null, events);
-                }
-            });
+            if (eventId[0]){
+                const query = "INSERT INTO Guests (guest_id, event_id, status) VALUES (?, ?, ?)";
+                const status = "accepted";
+                const eventIdNum = eventId[0].event_id;
+                connection.query(query, [userId, eventIdNum, status], (err, data) => {
+                    if (err) {
+                        console.error('Error in SQL query', err);
+                        callback(err, null);
+                    } else {
+                        callback(null, eventId[0]);
+                    }
+                });
+            } else {
+                callback(err, null);
+                return;
+            }
         });
     }
 

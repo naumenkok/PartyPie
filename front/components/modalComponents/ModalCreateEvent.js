@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import {Modal, View, Text, TouchableOpacity, TextInput} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Modal, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faCircleXmark} from "@fortawesome/free-regular-svg-icons";
-import {commonStyles} from '../styles/styles.js';
-import {modalStyles} from "../styles/modalWindowsStyle";
+import {commonStyles} from '../../styles/styles.js';
+import {modalStyles} from "../../styles/modalWindowsStyle";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {COLORS} from "../constants/theme";
-import TypeList from "./TypeList";
+import {COLORS} from "../../constants/theme";
+import TypeList from "../TypeList";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {createNewEvent} from "../services/apiEvent";
+import {createNewEvent} from "../../services/apiEvent";
 
 
 export default function ModalCreateEvent({isVisible, onClose, setLoading}) {

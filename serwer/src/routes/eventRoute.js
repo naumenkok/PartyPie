@@ -9,7 +9,8 @@ router.get('/event/:eventId', EventController.getEventsByEventId);
 router.post('/event/addNew', EventController.addEvent);
 router.delete('/event/delete/:eventId', EventController.deleteEventByEventId);
 router.get('/event/daysUntil/:eventId', EventController.getDaysUntilEvent);
-
-
+router.put('/event/updateName', EventController.updateEventName);
+router.put('/event/updateLink', EventController.updateEventPhotoLink);
+router.put('/event/updateInfo', EventController.updateEventInfo);
 
 module.exports = router;

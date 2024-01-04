@@ -1,17 +1,27 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, Image} from "react-native";
-import { postStyle } from '../styles/postStyle';
-import constants from '../constants/img.js';
-import {getUsernameByID} from "../services/api";
-import {deleteComment} from "../services/apiPosts";
+import { postStyle } from '../../styles/postStyle';
+import constants from '../../constants/img.js';
+import {getUsernameByID} from "../../services/api";
+import {deleteComment} from "../../services/apiPosts";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
-import {COLORS} from "../constants/theme";
+import {COLORS} from "../../constants/theme";
 import {faTrashCan} from "@fortawesome/free-regular-svg-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {Buffer} from "buffer";
 
 export default function Comment({ comment_id, user_id, text, post_date, image, isLoading, setLoading}) {
     const [username, setUsername] = useState('');
     const [isCommentCreator, setIsCommentCreator] = useState(false);
+    const [base64Image, setBase64Image] = useState(false);
+    const [base64Data, setBase64Data] = useState(false);
+
+    useEffect(()=>{
+        if (image) {console.log(image);
+            console.log("typeof comment:", typeof image);
+        }
+
+    },[comment_id])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -22,6 +32,7 @@ export default function Comment({ comment_id, user_id, text, post_date, image, i
                 console.error(error);
             }
         };
+
         (async () => {
             try {
                 await fetchData();
@@ -79,6 +90,12 @@ export default function Comment({ comment_id, user_id, text, post_date, image, i
                 </View>
             </View>
             <Text style={[postStyle.text, postStyle.postText]}>{text}</Text>
+            {/*{image && <Image style={{height: 200 , width: 100,}} source={{uri: "data:image/jpg;base64," + image}}/>}*/}
+
+
+            {/*{image && <Text style={[postStyle.text, postStyle.postText]}>{text}</Text>}*/}
+
+            {/*    reader.readAsDataURL(blob.blob);*/}
         </View>
     );
 }

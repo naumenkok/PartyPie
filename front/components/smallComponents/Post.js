@@ -1,24 +1,29 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {View, Text, TouchableOpacity, Image, TextInput} from "react-native";
-import { postStyle } from '../styles/postStyle';
-import constants from '../constants/img.js';
-import {addComment, deletePost, getCommentsByPostId} from "../services/apiPosts";
-import {getUsernameByID} from "../services/api";
+import { postStyle } from '../../styles/postStyle';
+import constants from '../../constants/img.js';
+import {addComment, addPost, deletePost, getCommentsByPostId} from "../../services/apiPosts";
+import {getUsernameByID} from "../../services/api";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faCamera} from "@fortawesome/free-solid-svg-icons";
 import {faCommentDots} from "@fortawesome/free-solid-svg-icons";
 import {faPaperPlane} from "@fortawesome/free-solid-svg-icons";
-import {COLORS} from "../constants/theme";
+import {COLORS} from "../../constants/theme";
 import Comment from "./Comment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {faTrashCan} from "@fortawesome/free-regular-svg-icons";
+import MyCamera from "../Camera";
+import {Buffer} from "buffer";
+import {CameraType} from "expo-camera";
 
 export default function Post({ post_id, user_id, text, post_date, image, isLoading, setLoading}) {
+    const [isCameraVisible, setCameraVisible] = useState(false);
+    const [photo, setPhoto] = useState();
     const [username, setUsername] = useState('');
     const [comment, setComment] = useState('');
     const [height, setHeight] = useState(0);
     const [isCommentActive, setCommentActive] = useState(false);
-    const [isAllComments, setAllComments] = useState(false);
+    const [isAllComments, setAllComments] = useState(true);
     const [comments, setComments] = useState([]);
     const [isPostCreator, setIsPostCreator] = useState(false);
 
@@ -38,6 +43,8 @@ export default function Post({ post_id, user_id, text, post_date, image, isLoadi
                 await fetchData();
             } catch (error) {
                 console.error('error', error);
+            } finally {
+                setLoading(false);
             }
         })();
     }, [isCommentActive, isAllComments, isLoading]);
@@ -45,7 +52,15 @@ export default function Post({ post_id, user_id, text, post_date, image, isLoadi
     const fetchAddComment = async () => {
         try {
             const userId = await AsyncStorage.getItem('userId');
-            await addComment(post_id, userId, comment);
+            if (photo){
+                console.log("try to add post with photo");
+                const photoForPost = photo;
+                await addComment(post_id, userId, comment, photoForPost);
+            } else {
+                console.log("without photo");
+                await addComment(post_id, userId, comment);
+            }
+            // await addComment(post_id, userId, comment);
             setComment('');
         } catch (error) {
             console.error(error);
@@ -54,9 +69,8 @@ export default function Post({ post_id, user_id, text, post_date, image, isLoadi
 
     const handleSend = async () => {
         try {
-            await fetchAddComment();
-            setCommentActive(false);
             setComment('');
+            await fetchAddComment();
         } catch (error) {
             console.error(error);
         } finally {
@@ -110,6 +124,7 @@ export default function Post({ post_id, user_id, text, post_date, image, isLoadi
                     <TextInput
                         multiline={true}
                         placeholder={'Enter comment ...'}
+                        value={comment}
                         onChangeText={comment => {
                             setComment(comment);
                             setCommentActive(true);
@@ -117,35 +132,57 @@ export default function Post({ post_id, user_id, text, post_date, image, isLoadi
                         onContentSizeChange={(event) =>
                             setHeight(event.nativeEvent.contentSize.height)
                         }
-                        style={[postStyle.inputText, { height: Math.max(20, height)}]}
+                        style={[postStyle.inputText]}
                     />
                     <TouchableOpacity onPress={handleSend} style={postStyle.icon}>
                         <FontAwesomeIcon icon={faPaperPlane} size={24} color={COLORS.grey}/>
                     </TouchableOpacity>
                 </View>
                 <View style={postStyle.horizontal}>
-                    <TouchableOpacity onPress={()=>{}} style={postStyle.photo}>
+                    <TouchableOpacity onPress={() => {setCameraVisible(!isCameraVisible)}} style={postStyle.photo}>
                         <FontAwesomeIcon icon={faCamera} size={24} color={COLORS.grey}/>
                     </TouchableOpacity>
                     {!isCommentActive && <TouchableOpacity onPress={()=>{setAllComments(!isAllComments)}} style={postStyle.comment}>
                         <FontAwesomeIcon icon={faCommentDots} size={24} color={COLORS.grey}/>
                     </TouchableOpacity>}
                 </View>
-            </View>
+                {/*{image && <Image style={{height: 70, width: 70,}} source={{uri:`data:image/jpg;base64,${Buffer.from(image.data).toString('base64')}`}}/>}*/}
 
-            {isAllComments && <View>
-                {comments.length > 0 ? (comments.map((comment, index) => (
-                    <Comment
-                        key={index}
-                        comment_id={comment.comment_id}
-                        user_id={comment.user_id}
-                        text={comment.text}
-                        post_date={comment.date}
-                        isLoading = {isLoading}
-                        setLoading={setLoading}
-                    />
-                ))):(<Text style={[postStyle.inputText, {color:COLORS.grey}]}>No comments yet</Text>)}
+                {/*{image && <Image style={{height: 70, width: 70,}} source={{uri:`data:image/jpg;base64,${Buffer.from(image.data).toString('base64')}`}}/>}*/}
+
+            </View>
+            {isCameraVisible && <View style={{width: '100%', height: 500, backgroundColor: 'black'}}>
+                <MyCamera photo={photo} setPhoto={setPhoto} isCameraVisible={isCameraVisible} setCameraVisible={setCameraVisible}></MyCamera>
             </View>}
+            {isAllComments && (
+                <View>
+                    {comments.length > 0 ? (
+                        comments.map((comment, index) => {
+                            const imageBase64 = comment.image
+                                ? Buffer.from(comment.image.data).toString('base64')
+                                : null;
+
+                            return (
+                                <Comment
+                                    key={index}
+                                    comment_id={comment.comment_id}
+                                    user_id={comment.user_id}
+                                    text={comment.text}
+                                    post_date={comment.date}
+                                    image={imageBase64}
+                                    isLoading={isLoading}
+                                    setLoading={setLoading}
+                                />
+                            );
+                        })
+                    ) : (
+                        <Text style={[postStyle.inputText, { color: COLORS.grey }]}>
+                            No comments yet
+                        </Text>
+                    )}
+                </View>
+            )}
+
         </View>
     );
 }

@@ -1,19 +1,13 @@
-import React, { useState } from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import {Modal, Text, TouchableOpacity, View} from 'react-native';
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faCircleXmark} from "@fortawesome/free-regular-svg-icons";
-import { commonStyles } from '../styles/styles.js';
+import {commonStyles} from '../../styles/styles.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {modalStyles} from "../styles/modalWindowsStyle";
-import {
-    CodeField,
-    Cursor,
-    useBlurOnFulfill,
-    useClearByFocusCell,
-} from 'react-native-confirmation-code-field';
-import {COLORS} from "../constants/theme";
+import {modalStyles} from "../../styles/modalWindowsStyle";
+import {CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell,} from 'react-native-confirmation-code-field';
 
-export default function ModalWindow ({ isVisible, onClose, onSubmit }) {
+export default function ModalWindow({isVisible, isCorrect, onClose, onSubmit}) {
     const CELL_COUNT = 5;
     const [value, setValue] = useState('');
     const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
@@ -26,6 +20,7 @@ export default function ModalWindow ({ isVisible, onClose, onSubmit }) {
         console.log(value);
         await AsyncStorage.setItem('code', value);
         onSubmit();
+        setValue('');
     };
 
     return (
@@ -57,10 +52,11 @@ export default function ModalWindow ({ isVisible, onClose, onSubmit }) {
                                 key={index}
                                 style={[modalStyles.cell, isFocused && modalStyles.focusCell]}
                                 onLayout={getCellOnLayoutHandler(index)}>
-                                {symbol || (isFocused ? <Cursor /> : null)}
+                                {symbol || (isFocused ? <Cursor/> : null)}
                             </Text>
                         )}
                     />
+                    {!isCorrect && <Text style={modalStyles.textError}>* Incorrect code</Text>}
                     <TouchableOpacity onPress={handleSubmit} style={modalStyles.submitButton}>
                         <Text style={modalStyles.submitButtonText}>Submit</Text>
                     </TouchableOpacity>

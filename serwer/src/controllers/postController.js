@@ -31,8 +31,9 @@ exports.addComment = (req, res) => {
     const postId = req.body.postId;
     const userId = req.body.userId;
     const text = req.body.text;
+    const image = req.body.image || null;
 
-    Post.addComment(postId, userId, text, (err, newCommentId) => {
+    Post.addComment(postId, userId, text, image, (err, newCommentId) => {
         if (err) {
             console.error('Error in controller:', err);
             res.status(500).json({ error: 'Error adding comment', details: err.message });
@@ -46,8 +47,9 @@ exports.addPost = (req, res) => {
     const eventId = req.body.eventId;
     const userId = req.body.userId;
     const text = req.body.text;
+    const image = req.body.image || null;
 
-    Post.addPost(eventId, userId, text, (err, newPostId) => {
+    Post.addPost(eventId, userId, text, image, (err, newPostId) => {
         if (err) {
             console.error('Error in controller:', err);
             res.status(500).json({ error: 'Error adding post' });

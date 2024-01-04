@@ -28,7 +28,7 @@ export const topBarStyle = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 14,
         paddingVertical: 5,
-        paddingLeft: 10,
-        paddingRight: 13,
+        paddingLeft: 5,
+        paddingRight: 10,
     }
 });

@@ -27,7 +27,9 @@ class Post {
         });
     }
 
-    static addComment(postId, userId, text, callback) {
+    static addComment(postId, userId, text, image, callback) {
+
+        const imageForDB = image ? JSON.stringify(image._data) : null;
         const getLastCommentIdQuery = "SELECT MAX(comment_id) AS lastCommentId FROM Comments";
         connection.query(getLastCommentIdQuery, (err, result) => {
             if (err) {
@@ -37,8 +39,8 @@ class Post {
                 const lastCommentId = result[0].lastCommentId || 0;
                 const newCommentId = lastCommentId + 1;
                 const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
-                const insertCommentQuery = "INSERT INTO Comments (comment_id, post_id, user_id, text, date) VALUES (?, ?, ?, ?, ?)";
-                connection.query(insertCommentQuery, [newCommentId, postId, userId, text, currentDate], (err, result) => {
+                const insertCommentQuery = "INSERT INTO Comments (comment_id, post_id, user_id, text, date, image) VALUES (?, ?, ?, ?, ?, ?)";
+                connection.query(insertCommentQuery, [newCommentId, postId, userId, text, currentDate, imageForDB], (err, result) => {
                     if (err) {
                         console.error('Error adding comment:', err);
                         callback(err, null);
@@ -50,7 +52,8 @@ class Post {
         });
     }
 
-    static addPost(eventId, userId, text, callback) {
+    static addPost(eventId, userId, text, image, callback) {
+        const imageForDB = image ? JSON.stringify(image._data) : null;
         const getLastPostIdQuery = "SELECT MAX(post_id) AS lastPostId FROM Posts";
         connection.query(getLastPostIdQuery, (err, result) => {
             if (err) {
@@ -60,13 +63,12 @@ class Post {
                 const lastPostId = result[0].lastPostId || 0;
                 const newPostId = lastPostId + 1;
                 const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
-                const insertPostQuery = "INSERT INTO Posts (post_id, event_id, user_id, text, date) VALUES (?, ?, ?, ?, ?)";
-                connection.query(insertPostQuery, [newPostId, eventId, userId, text, currentDate], (err, result) => {
+                const insertPostQuery = "INSERT INTO Posts (post_id, event_id, user_id, text, date, image) VALUES (?, ?, ?, ?, ?, ?)";
+                connection.query(insertPostQuery, [newPostId, eventId, userId, text, currentDate, imageForDB], (err, result) => {
                     if (err) {
                         console.error('Error adding post:', err);
                         callback(err, null);
                     } else {
-                        console.error('added post:', result);
                         callback(null, newPostId);
                     }
                 });

@@ -1,13 +1,13 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from "react-native";
-import { itemStyle } from '../styles/eventsListItemStyle';
+import { itemStyle } from '../../styles/eventsListItemStyle';
 import { BlurView } from 'expo-blur';
 import {LinearGradient} from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faTrashCan} from "@fortawesome/free-regular-svg-icons";
-import {COLORS} from "../constants/theme";
-import {authenticateUser} from "../services/api";
+import {COLORS} from "../../constants/theme";
+import {authenticateUser} from "../../services/api";
 
 export default function EventsItem({ navigation, backgroundColor, event_id, name, date, isModalVisible, setModalVisible}) {
     const itemStyles = itemStyle({ backgroundColor});

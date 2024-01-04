@@ -1,22 +1,36 @@
 import axios from 'axios';
 
 const BASE_URL = 'http://192.168.1.17:3000';
+// const BASE_URL = 'http://172.20.10.9:3000';
 
 export const authenticateUser = async (username, password) => {
-    try {
-        const response = await axios.post(
-            `${BASE_URL}/userRoute/login`,
-            {
-                username: username,
-                password: password,
-            });
-        if (response.data && response.data.user_id) {
-            return response.data.user_id;
-        } else {
-            console.error('Error in data authenticateUser:', response.data);
-        }
-    } catch (error) {
-        console.error('Error in authenticateUser:', error);
+    const response = await axios.post(
+        `${BASE_URL}/userRoute/login`,
+        {
+            username: username,
+            password: password,
+        });
+    if (response.data) {
+        return response.data;
+    } else {
+        console.error('Error in data authenticateUser:', response.data);
+    }
+};
+
+export const signUpUser = async (name, surname, username, email, password) => {
+    const response = await axios.post(
+        `${BASE_URL}/userRoute/create`,
+        {
+            name: name,
+            surname: surname,
+            username: username,
+            email: email,
+            password: password,
+        });
+    if (response.data) {
+        return response.data;
+    } else {
+        console.error('Error in data signUpUser:', response.data);
     }
 };
 

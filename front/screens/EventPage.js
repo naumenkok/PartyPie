@@ -9,12 +9,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {COLORS} from "../constants/theme";
 import {PacmanIndicator} from 'react-native-indicators';
 import TopBar from "../components/TopBar";
-import PostPageComponent from "../components/PostsPageComponent";
+import PostPageComponent from "../components/pageComponents/PostsPageComponent";
 
 export default function EventPage({navigation}) {
     const [event, setEvent] = useState();
     const [isLongLoading, setIsLongLoading] = useState(true);
-    const [isLoading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState('Exclamation');
     const [post, setPost] = useState('');
 
