@@ -17,6 +17,7 @@ import BudgetPageComponent from "../components/pageComponents/BudgetPageComponen
 import ModalWindow from "../components/modalComponents/ModalAddEventScreen";
 import ModalChangeName from "../components/modalComponents/modalWindowsForChanges/ModalChangeName";
 import WishListComponent from "../components/WishListComponent";
+import GuestsPageComponent from "../components/pageComponents/GuestsPageComponent";
 
 export default function EventPageForCreator({navigation}) {
     const [event, setEvent] = useState({});
@@ -73,6 +74,7 @@ export default function EventPageForCreator({navigation}) {
                         {activeTab==='Posts' &&  <PostPageComponent/>}
                         {activeTab==='Todo' &&  <TodoPageComponent event={event}/>}
                         {activeTab==='Budget' &&  <BudgetPageComponent event={event}/>}
+                        {activeTab==='Users' &&  <GuestsPageComponent event={event}/>}
                         {activeTab==='Wishlist' &&  <WishListComponent event={event}/>}
                     </ScrollView>
                 </View>

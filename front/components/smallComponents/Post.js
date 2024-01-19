@@ -3,7 +3,7 @@ import {View, Text, TouchableOpacity, Image, TextInput} from "react-native";
 import { postStyle } from '../../styles/postStyle';
 import constants from '../../constants/img.js';
 import {addComment, addPost, deletePost, getCommentsByPostId} from "../../services/apiPosts";
-import {getUsernameByID} from "../../services/api";
+import {getUsernameByID} from "../../services/apiUser";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faCamera} from "@fortawesome/free-solid-svg-icons";
 import {faCommentDots} from "@fortawesome/free-solid-svg-icons";
@@ -60,7 +60,6 @@ export default function Post({ post_id, user_id, text, post_date, image, isLoadi
                 console.log("without photo");
                 await addComment(post_id, userId, comment);
             }
-            // await addComment(post_id, userId, comment);
             setComment('');
         } catch (error) {
             console.error(error);
@@ -71,6 +70,7 @@ export default function Post({ post_id, user_id, text, post_date, image, isLoadi
         try {
             setComment('');
             await fetchAddComment();
+            setCameraVisible(!isCameraVisible);
         } catch (error) {
             console.error(error);
         } finally {
@@ -158,10 +158,6 @@ export default function Post({ post_id, user_id, text, post_date, image, isLoadi
                 <View>
                     {comments.length > 0 ? (
                         comments.map((comment, index) => {
-                            const imageBase64 = comment.image
-                                ? Buffer.from(comment.image.data).toString('base64')
-                                : null;
-
                             return (
                                 <Comment
                                     key={index}
@@ -169,7 +165,7 @@ export default function Post({ post_id, user_id, text, post_date, image, isLoadi
                                     user_id={comment.user_id}
                                     text={comment.text}
                                     post_date={comment.date}
-                                    image={imageBase64}
+                                    image={comment.image}
                                     isLoading={isLoading}
                                     setLoading={setLoading}
                                 />

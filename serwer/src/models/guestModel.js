@@ -79,6 +79,18 @@ class Guest {
         });
     }
 
+    static getGuestsByEventId(eventId, callback) {
+        const query = "SELECT G.guest_id, G.status, U.username FROM Guests G JOIN Users U ON G.guest_id = U.user_id WHERE G.event_id = ?";
+
+        connection.query(query, [eventId], (err, data) => {
+            if (err) {
+                console.error('Error in SQL query', err);
+                callback(err, null);
+            } else {
+                callback(null, data);
+            }
+        });
+    }
 
 }
 

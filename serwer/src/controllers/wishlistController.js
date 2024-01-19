@@ -1,4 +1,5 @@
 const Wishlist = require('../models/wishlistModel');
+const Task = require("../models/taskModel");
 
 exports.getWishlistByEventId = (req, res) => {
     const eventId = req.params.eventId;
@@ -58,6 +59,20 @@ exports.deleteWishlistItem = (req, res) => {
             } else {
                 res.status(404).json({ error: 'Row not found' });
             }
+        }
+    });
+};
+
+
+exports.addWish = (req, res) => {
+    const { eventId, name, link } = req.body;
+
+    Wishlist.addWish(eventId, name, link, (err, result) => {
+        if (err) {
+            console.error('Error in controller:', err);
+            res.status(500).json({ error: 'Error adding wish' });
+        } else {
+            res.status(201).json({ message: 'Task added successfully' });
         }
     });
 };

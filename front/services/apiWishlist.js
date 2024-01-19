@@ -35,3 +35,39 @@ export const toggleStatusById = async (wish_id, guestId) => {
         console.error('Error in toggleStatusById:', error);
     }
 };
+
+
+export const deleteWishById = async (wishId) => {
+    try {
+        const response = await axios.delete(
+            `${BASE_URL}/wishlistRoute/wishlist/delete/${wishId}`);
+        if (response.data) {
+            return response.data;
+        } else {
+            console.error('Error in data deleteWishById:', response.data);
+        }
+    } catch (error) {
+        console.error('Error in deleteWishById:', error);
+    }
+};
+
+
+
+export const addWish = async (eventId, name, link) => {
+    try {
+        const response = await axios.post(
+            `${BASE_URL}/wishlistRoute/wishlist/add`,
+            {
+                eventId: eventId,
+                name: name,
+                link: link,
+            });
+        if (response.data) {
+            return response.data;
+        } else {
+            console.error('Error in data addWish:', response.data);
+        }
+    } catch (error) {
+        console.error('Error in addWish:', error);
+    }
+};

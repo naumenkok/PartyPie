@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faTrashCan} from "@fortawesome/free-regular-svg-icons";
 import {COLORS} from "../../constants/theme";
-import {authenticateUser} from "../../services/api";
+import {authenticateUser} from "../../services/apiUser";
 
 export default function EventsItem({ navigation, backgroundColor, event_id, name, date, isModalVisible, setModalVisible}) {
     const itemStyles = itemStyle({ backgroundColor});

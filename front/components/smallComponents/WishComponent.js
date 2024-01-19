@@ -2,11 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {Linking, Text, TouchableOpacity, View} from 'react-native';
 import {eventPageStyle} from '../../styles/EventPageStyle';
 import {COLORS} from "../../constants/theme";
-import {getWishesByEventId} from "../../services/apiWishlist";
+import {deleteWishById} from "../../services/apiWishlist";
 import Checkbox from 'expo-checkbox';
 import {toggleStatusById} from '../../services/apiWishlist';
 import {faPencil} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
+import {faTrashCan} from "@fortawesome/free-regular-svg-icons";
 
 
 export default function WishComponent({wish, setLoading, userId, screen}) {
@@ -14,6 +15,10 @@ export default function WishComponent({wish, setLoading, userId, screen}) {
     const handleLinkPress = (link) => {
         Linking.openURL(link);
         console.log(wish.status);
+    };
+
+    const handleDelete = () =>{
+        deleteWishById(wish.wish_id).then(r => setLoading(true));
     };
 
     const toggleStatus = () => {
@@ -24,7 +29,7 @@ export default function WishComponent({wish, setLoading, userId, screen}) {
     };
 
     return (
-         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+         <View style={{ flexDirection: 'row', alignItems: 'center', margin: 5 }}>
              {screen === "Guest" ? (
                  <Checkbox
                      value={toggleCheckBox}
@@ -33,8 +38,9 @@ export default function WishComponent({wish, setLoading, userId, screen}) {
                      }}
                      color={toggleCheckBox ? COLORS.red : undefined}
                  />
-             ):(<TouchableOpacity>
-                     <FontAwesomeIcon icon={faPencil} size={35} style={{ color: COLORS.beaver }} />
+             ):(
+                 <TouchableOpacity onPress={handleDelete}>
+                     <FontAwesomeIcon icon={faTrashCan} size={30} style={{ color: COLORS.beaver }} />
                  </TouchableOpacity>)
              }
              {wish.link && wish.link !== '' ? (<Text style={[eventPageStyle.textWishlist, {

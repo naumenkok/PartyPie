@@ -15,9 +15,9 @@ export default function MyCamera({photo, setPhoto, isCameraVisible, setCameraVis
     const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
     const [type, setType] = useState(CameraType.back);
     const [photoBase64, setPhotoBase64] = useState();
-    const base64 = 'iVBORw0KGgoAAAANSUhEU ....'
-    const buffer = Buffer.from(base64, "base64");
-    const blob = new Blob([buffer], { type: '[content-type]' })
+    // const base64 = 'iVBORw0KGgoAAAANSUhEU ....'
+    // const buffer = Buffer.from(base64, "base64");
+    // const blob = new Blob([buffer], { type: '[content-type]' })
 
 
     useEffect(() => {
@@ -42,16 +42,9 @@ export default function MyCamera({photo, setPhoto, isCameraVisible, setCameraVis
             exif: false,
         };
         let newPhoto = await cameraRef.current.takePictureAsync(options);
-        console.log("typeof camera newPhoto:", typeof newPhoto);
-        console.log("typeof camera newPhoto.base64:", typeof newPhoto.base64);
-        // console.log(newPhoto.base64);
+        console.log("typeof camera newPhoto1:", typeof newPhoto);
+        console.log("typeof camera newPhoto.base64 2:", newPhoto.base64.length);
         setPhotoBase64(newPhoto);
-        // let base64Data = newPhoto.base64;
-        // const buffer = Buffer.from(base64Data, "base64");
-        // const newBlob = new Blob([buffer], { type: 'image/png' });
-        // console.log("typeof newBlob:", typeof newBlob);
-        // // console.log(newBlob);
-        // setPhoto(newBlob);
         setPhoto(newPhoto.base64);
     };
 
@@ -61,7 +54,7 @@ export default function MyCamera({photo, setPhoto, isCameraVisible, setCameraVis
 
     if (photoBase64) {
         let savePhoto = () => {
-            setCameraVisible(!isCameraVisible);
+            // setCameraVisible(!isCameraVisible);
             MediaLibrary.saveToLibraryAsync(photoBase64.uri).then(() => {
                 // setPhotoBase64(undefined);
                 // setPhoto(undefined);

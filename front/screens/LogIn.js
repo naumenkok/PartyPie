@@ -5,7 +5,7 @@ import constants from '../constants/img.js';
 import {LinearGradient} from "expo-linear-gradient";
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {authenticateUser} from '../services/api';
+import {authenticateUser} from '../services/apiUser';
 import {modalStyles} from "../styles/modalWindowsStyle";
 
 export default function LogIn({navigation}) {

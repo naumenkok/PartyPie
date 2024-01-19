@@ -4,15 +4,16 @@ import { commonStyles } from '../styles/styles.js';
 import constants from '../constants/img.js';
 import { BlurView } from 'expo-blur';
 import {COLORS} from "../constants/theme";
+import gradientMyEvents from "../assets/img/gradientMyEvents.png";
 
 export default function Profile({navigation}) {
     return (
-        <ImageBackground source={constants.gradientEvents} style={commonStyles.imageBackground}>
+        <ImageBackground source={constants.gradientBright} style={commonStyles.imageBackground}>
             <View style={commonStyles.profileTop}>
 
                 <View style={[commonStyles.buttonProfile, {width: 300}]}>
                     <BlurView intensity={30} tint="light" style={[commonStyles.blur]}>
-                    <Text style={commonStyles.name}>charlotte tilbury</Text>
+                    <Text style={commonStyles.name}>Maja Lewandowska</Text>
                     </BlurView>
                 </View>
             </View>
@@ -24,23 +25,23 @@ export default function Profile({navigation}) {
                         <Text style={[commonStyles.text, {fontSize:16,color:COLORS.greendark}]}>Log out</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={commonStyles.horizontal}>
-                    <View style={[commonStyles.buttonProfile, {borderColor:COLORS.redorange}]}>
-                        <TouchableOpacity
-                            onPress={() => navigation.navigate('LogIn')}
-                        >
-                            <Text style={[commonStyles.text, commonStyles.textButton, {color:COLORS.redorange}]}>Personal data</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={[commonStyles.buttonProfile, {borderColor:COLORS.redorange}]}>
-                        <TouchableOpacity
-                            onPress={() => navigation.navigate('LogIn')}
-                        >
-                            <Text style={[commonStyles.text, commonStyles.textButton, {color:COLORS.redorange}]}>Change data</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={commonStyles.horizontal}>
+                {/*<View style={commonStyles.horizontal}>*/}
+                {/*    <View style={[commonStyles.buttonProfile, {borderColor:COLORS.redorange}]}>*/}
+                {/*        <TouchableOpacity*/}
+                {/*            onPress={() => navigation.navigate('LogIn')}*/}
+                {/*        >*/}
+                {/*            <Text style={[commonStyles.text, commonStyles.textButton, {color:COLORS.redorange}]}>Personal data</Text>*/}
+                {/*        </TouchableOpacity>*/}
+                {/*    </View>*/}
+                {/*    <View style={[commonStyles.buttonProfile, {borderColor:COLORS.redorange}]}>*/}
+                {/*        <TouchableOpacity*/}
+                {/*            onPress={() => navigation.navigate('LogIn')}*/}
+                {/*        >*/}
+                {/*            <Text style={[commonStyles.text, commonStyles.textButton, {color:COLORS.redorange}]}>Change data</Text>*/}
+                {/*        </TouchableOpacity>*/}
+                {/*    </View>*/}
+                {/*</View>*/}
+                <View style={[commonStyles.horizontal, {marginBottom: 70}]}>
                     <View style={commonStyles.buttonProfile}>
                         <TouchableOpacity onPress={() => {
                             navigation.navigate('TabNavigator', { screen: 'Events' });

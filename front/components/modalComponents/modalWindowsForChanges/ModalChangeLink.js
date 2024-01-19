@@ -5,7 +5,7 @@ import {faCircleXmark} from "@fortawesome/free-regular-svg-icons";
 import {commonStyles} from '../../../styles/styles.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {modalStyles} from "../../../styles/modalWindowsStyle";
-import {addGuest} from "../../../services/api";
+import {addGuest} from "../../../services/apiUser";
 import {updateEventLink, updateEventName} from "../../../services/apiEvent";
 
 export default function ModalChangeName({event, isVisible, setVisible, onClose, setLoading}) {

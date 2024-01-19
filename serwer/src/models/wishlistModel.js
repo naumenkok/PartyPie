@@ -59,6 +59,30 @@ class Wishlist {
         });
     }
 
+    static addWish(eventId, name, link, callback) {
+
+        const getLastWishIdQuery = "SELECT MAX(wish_id) AS lastWishId FROM wishlist";
+        connection.query(getLastWishIdQuery, (err, result) => {
+            if (err) {
+                console.error('Error in SQL query', err);
+                callback(err, null);
+            } else {
+                const lastWishId = result[0].lastWishId || 0;
+                const newWishId = lastWishId + 1;
+
+                const insertQuery = "INSERT INTO wishlist (wish_id, event_id, name, link) VALUES (?, ?, ?, ?)";
+                connection.query(insertQuery, [newWishId, eventId, name, link], (err, result) => {
+                    if (err) {
+                        console.error('Error in SQL query', err);
+                        callback(err, null);
+                    } else {
+                        callback(null, result);
+                    }
+                });
+            }
+        });
+    }
+
 }
 
 module.exports = Wishlist;
