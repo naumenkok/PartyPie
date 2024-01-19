@@ -115,7 +115,7 @@ export const eventPageStyle = StyleSheet.create({
             alignItems: 'center',
             borderWidth: 5,
             borderColor: COLORS.coral,
-            borderRadius: 20,
+            borderRadius: 30,
             backgroundColor: COLORS.white,
             padding: 10,
         },
@@ -132,4 +132,8 @@ export const eventPageStyle = StyleSheet.create({
             marginTop: 25,
             paddingHorizontal: 20
         },
+        status:{
+            position: 'absolute',
+            right: 10,
+        }
 });

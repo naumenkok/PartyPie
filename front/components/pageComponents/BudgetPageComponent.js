@@ -15,13 +15,13 @@ import {PacmanIndicator} from "react-native-indicators";
 import TaskComponent from "../smallComponents/TaskComponent";
 import {modalStyles} from "../../styles/modalWindowsStyle";
 import {SelectList} from "react-native-dropdown-select-list";
-import {getAllTasks} from "../../services/apiTasks";
+import {getAllBudgets, getAllSubBudgets} from "../../services/apiBudget";
+import BudgetComponent from "../smallComponents/BudgetComponent";
 
 export default function BudgetPageComponent({ event }) {
     const [arrayOfBudgetSubCat, setArrayOfBudgetSubCat] = useState([]);
     const [arrayOfBudgetCat, setArrayOfBudgetCat] = useState([]);
     const [budgetSubCat, setBudgetSubCat] = useState([]);
-    const [budgetCat, setBudgetCat] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [isModalAddBudgetCat, setModalAddBudgetCat] = useState(false);
     const [isModalAddBudgetSubCat, setModalAddBudgetSubCat] = useState(false);
@@ -38,23 +38,25 @@ export default function BudgetPageComponent({ event }) {
         {key:'9', value:'Gifts/Prizes:'},
         {key:'10', value:'Equipment'},
         {key:'11', value:'Another'},
-    ]
+    ];
+    const [budgetCat, setBudgetCat] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
-            // try {
-            //     var tasks = await getAllTasks(event.event_id);
-            //     tasks.sort((a, b) => (a.priority || Infinity) - (b.priority || Infinity));
-            //     setTasks(tasks);
-            // } catch (error) {
-            //     console.error(error);
-            // } finally {
-            //     setLoading(false);
-            //     setShortLoading(false);
-            setShortLoading(false);
+            try {
+                console.log("event.event_id: ", event.event_id);
+                const budgets = await getAllBudgets(event.event_id);
+                console.log("budgets: ", budgets);
+                setBudgetCat(budgets);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
         };
         fetchData();
     }, [isLoading]);
+
 
     if (isLoading) {
         return (
@@ -67,6 +69,17 @@ export default function BudgetPageComponent({ event }) {
         return (
             <ScrollView style={eventPageStyle.scrollBox3}>
                 <View style={eventPageStyle.containerWishlist}>
+                    {budgetCat.length > 0 ? (
+                        budgetCat.map((budget) => (
+                            <View key={budget.budget_id} style={{ alignSelf: 'stretch' }}>
+                                <BudgetComponent budget={budget} isLoading={isLoading} setLoading={setLoading}/>
+                            </View>
+                        ))
+                    ) : (
+                        <View style={{ alignSelf: 'stretch' }}>
+                            <Text style={{ ...eventPageStyle.text, color: COLORS.pink }}>No info yet :(</Text>
+                        </View>
+                    )}
                     <View style={[eventPageStyle.button, {width: 310, marginBottom: 25}]}>
                         <TouchableOpacity onPress={() => {
                             setModalAddBudgetCat(!isModalAddBudgetCat)

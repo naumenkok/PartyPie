@@ -1,19 +1,24 @@
-const mysql = require('mysql');
+// const mysql = require('mysql');
 const db = require('../config');
 const util = require("util");
-const connection = mysql.createConnection(db.database);
-const query = util.promisify(connection.query).bind(connection);
+// const connection = mysql.createConnection(db.database);
+// const query = util.promisify(connection.query).bind(connection);
 
 class User {
-    static async createUser(name, surname, username, email, password) {
+    constructor(connection) {
+        this.connection = connection || require('mysql').createConnection(db.database);
+        this.query = util.promisify(this.connection.query).bind(this.connection);
+    }
+
+    async createUser(name, surname, username, email, password) {
         try {
-            const result = await query('SELECT MAX(user_id) AS max_id FROM Users');
+            const result = await this.query('SELECT MAX(user_id) AS max_id FROM Users');
             const lastUserId = result[0].max_id || 0;
             const nextUserId = lastUserId + 1;
             const insertQuery = 'INSERT INTO Users (user_id, name, surname, username, email, password) VALUES (?, ?, ?, ?, ?, ?)';
             const values = [nextUserId, name, surname, username, email, password];
 
-            await query(insertQuery, values);
+            await this.query(insertQuery, values);
             return nextUserId;
         } catch (err) {
             console.error('Error in SQL query', err);
@@ -22,10 +27,10 @@ class User {
     }
 
 
-    static getUserById(userId) {
+     getUserById(userId) {
         return new Promise(async (resolve, reject) => {
             try {
-                const user = await query('SELECT * FROM Users WHERE user_id = ?', [userId]);
+                const user = await this.query('SELECT * FROM Users WHERE user_id = ?', [userId]);
                 resolve(user);
             } catch (err) {
                 console.error('Error in SQL query', err);
@@ -34,9 +39,9 @@ class User {
         });
     }
 
-    static async getAllUsers() {
+    async getAllUsers() {
         try {
-            const users = await query('SELECT * FROM Users');
+            const users = await this.query('SELECT * FROM Users');
             return users;
         } catch (err) {
             console.error('Error in SQL query', err);
@@ -44,9 +49,9 @@ class User {
         }
     }
 
-    static async getUserByLoginAndPassword(username, password) {
+     async getUserByLoginAndPassword(username, password) {
         try {
-            const user = await query('SELECT user_id FROM Users WHERE username = ? AND password = ?', [username, password]);
+            const user = await this.query('SELECT user_id FROM Users WHERE username = ? AND password = ?', [username, password]);
             return user[0];
         } catch (err) {
             console.error('Error in SQL query', err);

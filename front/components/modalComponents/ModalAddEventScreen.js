@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Modal, Text, TouchableOpacity, View} from 'react-native';
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faCircleXmark} from "@fortawesome/free-regular-svg-icons";
@@ -11,6 +11,7 @@ export default function ModalWindow({isVisible, isCorrect, onClose, onSubmit}) {
     const CELL_COUNT = 5;
     const [value, setValue] = useState('');
     const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
+    const [isError, setError] = useState(true);
     const [props, getCellOnLayoutHandler] = useClearByFocusCell({
         value,
         setValue,
@@ -22,6 +23,11 @@ export default function ModalWindow({isVisible, isCorrect, onClose, onSubmit}) {
         onSubmit();
         setValue('');
     };
+
+    useEffect(() => {
+        const error = !value;
+        setError(error);
+    }, [value]);
 
     return (
         <Modal
@@ -56,7 +62,8 @@ export default function ModalWindow({isVisible, isCorrect, onClose, onSubmit}) {
                             </Text>
                         )}
                     />
-                    {!isCorrect && <Text style={modalStyles.textError}>* Incorrect code</Text>}
+                    {isError && <Text style={[modalStyles.textError]}>* Fields cannot be empty!</Text>}
+                    {!isError && !isCorrect && <Text style={modalStyles.textError}>* Incorrect code</Text>}
                     <TouchableOpacity onPress={handleSubmit} style={modalStyles.submitButton}>
                         <Text style={modalStyles.submitButtonText}>Submit</Text>
                     </TouchableOpacity>

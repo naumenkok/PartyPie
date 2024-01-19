@@ -133,9 +133,10 @@ export const commonStyles = StyleSheet.create({
     },
     buttonProfileLogOut: {
         alignSelf: 'flex-end',
-        marginHorizontal: -10,
+        marginHorizontal: -5,
         borderColor: COLORS.greendark,
         marginTop: 30,
+        borderRadius: 15,
         marginBottom: 15,
         borderWidth: 7,
         height: 50,
@@ -222,7 +223,7 @@ export const commonStyles = StyleSheet.create({
     profileBottom: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'flex-end',
         paddingHorizontal: 30,
     },
     horizontal: {

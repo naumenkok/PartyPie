@@ -8,7 +8,7 @@ import constants from "../constants/img";
 import ModalWindow from "../components/modalComponents/ModalAddEventScreen";
 import TabButton from "../components/TabButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {addGuest,} from "../services/api";
+import {addGuest,} from "../services/apiUser";
 import {getFutureEvents, getPastEvents} from "../services/apiEvent";
 import Skeleton from "../components/Skeleton";
 

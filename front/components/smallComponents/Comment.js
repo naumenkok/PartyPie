@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, Image} from "react-native";
 import { postStyle } from '../../styles/postStyle';
 import constants from '../../constants/img.js';
-import {getUsernameByID} from "../../services/api";
+import {getUsernameByID} from "../../services/apiUser";
 import {deleteComment} from "../../services/apiPosts";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {COLORS} from "../../constants/theme";
@@ -13,12 +13,10 @@ import {Buffer} from "buffer";
 export default function Comment({ comment_id, user_id, text, post_date, image, isLoading, setLoading}) {
     const [username, setUsername] = useState('');
     const [isCommentCreator, setIsCommentCreator] = useState(false);
-    const [base64Image, setBase64Image] = useState(false);
-    const [base64Data, setBase64Data] = useState(false);
 
     useEffect(()=>{
-        if (image) {console.log(image);
-            console.log("typeof comment:", typeof image);
+        if (image) {
+            console.log("typeof comment image:", typeof image);
         }
 
     },[comment_id])
@@ -90,7 +88,7 @@ export default function Comment({ comment_id, user_id, text, post_date, image, i
                 </View>
             </View>
             <Text style={[postStyle.text, postStyle.postText]}>{text}</Text>
-            {/*{image && <Image style={{height: 200 , width: 100,}} source={{uri: "data:image/jpg;base64," + image}}/>}*/}
+            {image && <Image style={{height: 400 , width: 300, alignSelf: 'center'}} source={{uri: "data:image/jpg;base64," + image}}/>}
 
 
             {/*{image && <Text style={[postStyle.text, postStyle.postText]}>{text}</Text>}*/}

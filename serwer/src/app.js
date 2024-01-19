@@ -17,8 +17,8 @@ moment.tz.setDefault('UTC');
 
 
 const connection = mysql.createConnection(db.database);
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+app.use(bodyParser.json({limit:'50mb'}));
 connection.connect((err) => {
     if (err) {
         console.error('Error connecting to database:', err);

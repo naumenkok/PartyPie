@@ -53,3 +53,15 @@ exports.addGuest = (req, res) => {
     });
 };
 
+exports.getGuestsByEventId = (req, res) => {
+    const eventId = req.params.eventId;
+
+    Guest.getGuestsByEventId(eventId, (err, data) => {
+        if (err) {
+            console.error('Error in controller:', err);
+            res.status(500).json({ error: 'Error getting guests' });
+        } else {
+            res.status(200).json(data);
+        }
+    });
+};

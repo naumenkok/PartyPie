@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { commonStyles } from '../styles/styles.js';
 import constants from '../constants/img.js';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
-import {signUpUser} from "../services/api";
+import {signUpUser} from "../services/apiUser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {modalStyles} from "../styles/modalWindowsStyle";
 import {COLORS} from "../constants/theme";

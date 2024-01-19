@@ -6,6 +6,7 @@ router.get('/event/:eventId/wishlist', WishlistController.getWishlistByEventId);
 router.put('/wishlist/toggleStatus', WishlistController.toggleStatusById);
 router.put('/wishlist/update/:wishId', WishlistController.updateWishlistItem);
 router.delete('/wishlist/delete/:wishId', WishlistController.deleteWishlistItem);
+router.post('/wishlist/add', WishlistController.addWish);
 
 
 module.exports = router;

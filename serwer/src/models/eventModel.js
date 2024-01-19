@@ -1,28 +1,32 @@
 const mysql = require('mysql');
 const db = require('../config');
-const moment = require('moment');
 const connection = mysql.createConnection(db.database);
+const moment = require('moment-timezone');
+moment.tz.setDefault('UTC');
 
 class Event {
-    static getMyEventsByUserId(userId, callback) {
-        const query = "SELECT * FROM Events WHERE creator_id = ? ORDER BY date";
-        connection.query(query, [userId], (err, events) => {
-            if (err) {
-                console.error('Error in SQL query', err);
-                callback(err, null);
-            } else {
-                callback(null, events);
-            }
-        });
+    static handleQueryError(err, callback) {
+        console.error('Error in SQL query', err);
+        callback(err, null);
     }
+
+    // static getMyEventsByUserId(userId, callback) {
+    //     const query = "SELECT * FROM Events WHERE creator_id = ? ORDER BY date";
+    //     connection.query(query, [userId], (err, events) => {
+    //         if (err) {
+    //             this.handleQueryError(err, callback);
+    //         } else {
+    //             callback(null, events);
+    //         }
+    //     });
+    // }
 
     static getPastMyEventsByUserId(userId, callback) {
         const currentDate = new Date();
         const query = "SELECT * FROM Events WHERE creator_id = ? AND date < ? ORDER BY date";
         connection.query(query, [userId, currentDate], (err, events) => {
             if (err) {
-                console.error('Error in SQL query', err);
-                callback(err, null);
+                this.handleQueryError(err, callback);
             } else {
                 callback(null, events);
             }
@@ -34,8 +38,7 @@ class Event {
         const query = "SELECT * FROM Events WHERE creator_id = ? AND date > ? ORDER BY date";
         connection.query(query, [userId, currentDate], (err, events) => {
             if (err) {
-                console.error('Error in SQL query', err);
-                callback(err, null);
+                this.handleQueryError(err, callback);
             } else {
                 callback(null, events);
             }
@@ -44,10 +47,9 @@ class Event {
 
     static getEventsByEventId(eventId, callback) {
         const query = "SELECT * FROM Events WHERE event_id = ?";
-        connection.query(query, eventId, (err, data) => {
+        connection.query(query, [eventId], (err, data) => {
             if (err) {
-                console.error('Error in SQL query', err);
-                callback(err, null);
+                this.handleQueryError(err, callback);
             } else {
                 callback(null, data);
             }
@@ -56,13 +58,12 @@ class Event {
 
     static getDaysUntilEvent(eventId) {
         return new Promise((resolve, reject) => {
-            moment.tz.setDefault('UTC');
+            // moment.tz.setDefault('UTC');
 
             const query = "SELECT date FROM Events WHERE event_id = ?";
-            connection.query(query, eventId, (err, eventDate) => {
+            connection.query(query, [eventId], (err, eventDate) => {
                 if (err) {
-                    console.error('Error in SQL query', err);
-                    reject(err);
+                    this.handleQueryError(err, reject);
                 } else {
                     const eventDateString = eventDate[0].date;
                     const currentDate = moment();
@@ -78,10 +79,9 @@ class Event {
 
     static getEventIdByEventCode(eventCode, callback) {
         const query = "SELECT event_id FROM Events WHERE code = ?";
-        connection.query(query, eventCode, (err, eventId) => {
+        connection.query(query, [eventCode], (err, eventId) => {
             if (err) {
-                console.error('Error in SQL query', err);
-                callback(err, null);
+                this.handleQueryError(err, callback);
             } else {
                 callback(null, eventId);
             }
@@ -93,8 +93,7 @@ class Event {
 
         connection.query(query, (err, result) => {
             if (err) {
-                console.error('Error in SQL query', err);
-                callback(err, null);
+                this.handleQueryError(err, callback);
             } else {
                 const lastEventId = result[0].last_event_id || 0;
                 callback(null, lastEventId);
@@ -105,20 +104,14 @@ class Event {
     static generateRandomCode() {
         const codeLength = 5;
         const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        let code = '';
-        for (let i = 0; i < codeLength; i++) {
-            const randomIndex = Math.floor(Math.random() * charset.length);
-            code += charset.charAt(randomIndex);
-        }
-        return code;
+        return Array.from({ length: codeLength }, () => charset.charAt(Math.floor(Math.random() * charset.length))).join('');
     }
 
     static isCodeUnique(code, callback) {
         const checkQuery = "SELECT COUNT(*) AS code_count FROM Events WHERE code = ?";
         connection.query(checkQuery, [code], (err, result) => {
             if (err) {
-                console.error('Error in SQL query', err);
-                callback(false);
+                this.handleQueryError(err, () => callback(false));
             } else {
                 const codeCount = result[0].code_count;
                 callback(codeCount === 0);
@@ -129,7 +122,7 @@ class Event {
     static addEvent(eventData, callback) {
         this.getLastEventId((err, lastEventId) => {
             if (err) {
-                callback(err, null);
+                this.handleQueryError(err, callback);
                 return;
             }
             const newEventId = lastEventId + 1;
@@ -142,8 +135,7 @@ class Event {
 
                         connection.query(insertQuery, values, (err, data) => {
                             if (err) {
-                                console.error('Error in SQL query', err);
-                                callback(err, null);
+                                this.handleQueryError(err, callback);
                             } else {
                                 callback(null, data);
                             }
@@ -159,10 +151,9 @@ class Event {
 
     static deleteEventByEventId(eventId, callback) {
         const query = "DELETE FROM Events WHERE event_id = ?";
-        connection.query(query, eventId, (err, result) => {
+        connection.query(query, [eventId], (err, result) => {
             if (err) {
-                console.error('Error in SQL query', err);
-                callback(err, null);
+                this.handleQueryError(err, callback);
             } else {
                 callback(null, result);
             }
@@ -173,8 +164,7 @@ class Event {
         const query = "UPDATE Events SET name = ? WHERE event_id = ?";
         connection.query(query, [newName, eventId], (err, data) => {
             if (err) {
-                console.error('Error in SQL query', err);
-                callback(err, null);
+                this.handleQueryError(err, callback);
             } else {
                 callback(null, data);
             }
@@ -185,8 +175,7 @@ class Event {
         const query = "UPDATE Events SET photo_link = ? WHERE event_id = ?";
         connection.query(query, [newLink, eventId], (err, data) => {
             if (err) {
-                console.error('Error in SQL query', err);
-                callback(err, null);
+                this.handleQueryError(err, callback);
             } else {
                 callback(null, data);
             }
@@ -197,8 +186,7 @@ class Event {
         const query = "UPDATE Events SET country = ?, city = ?, street = ?, house = ?, date = ? WHERE event_id = ?";
         connection.query(query, [country, city, street, house, date, eventId], (err, data) => {
             if (err) {
-                console.error('Error in SQL query', err);
-                callback(err, null);
+                this.handleQueryError(err, callback);
             } else {
                 callback(null, data);
             }

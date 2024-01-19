@@ -4,16 +4,26 @@
   "description": "Backend for mobile app",
   "main": "app.js",
   "scripts": {
-    "test": "node src/app.js"
+    "start": "node src/app.js",
+    "test": "jest",
+    "jest": "echo \"Error: no test specified\" && exit 1"
+  },
+  "jest": {
+    "testTimeout": 10000
   },
   "author": "Kateryna Naumenko",
   "license": "ISC",
   "dependencies": {
+    "@azure/storage-blob": "^12.17.0",
     "body-parser": "^1.20.2",
     "dotenv": "^16.3.1",
     "express": "^4.17.1",
     "moment": "^2.29.4",
-    "moment-timezone": "^0.5.43",
-    "mysql": "^2.18.1"
+    "moment-timezone": "^0.5.44",
+    "mysql": "^2.18.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }

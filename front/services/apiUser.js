@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const BASE_URL = 'http://192.168.1.17:3000';
-// const BASE_URL = 'http://172.20.10.9:3000';
 
 export const authenticateUser = async (username, password) => {
     const response = await axios.post(
@@ -37,7 +36,7 @@ export const signUpUser = async (name, surname, username, email, password) => {
 export const getUsernameByID = async (userId) => {
     try {
         const response = await axios.get(
-            `${BASE_URL}/userRoute/usernameById/${userId}`);
+            `${BASE_URL}/userRoute/userById/${userId}`);
         if (response.data) {
             return response.data[0].username;
         } else {
@@ -64,5 +63,20 @@ export const addGuest = async (user_id, code) => {
         }
     } catch (error) {
         console.error('Error in addGuest:', error);
+    }
+};
+
+
+export const getGuestsByEventId = async (eventId) => {
+    try {
+        const response = await axios.get(
+            `${BASE_URL}/guestRoute/guests/event/${eventId}`);
+        if (response.data) {
+            return response.data;
+        } else {
+            console.error('Error in data getGuestsByEventId:', response.data);
+        }
+    } catch (error) {
+        console.error('Error in getGuestsByEventId:', error);
     }
 };

@@ -14,33 +14,62 @@ exports.getAllPostsByEventId = (req, res) => {
     });
 };
 
-exports.getAllCommentsByPostId = (req, res) => {
-    const postId = req.params.postId;
-
-    Post.getAllCommentsByPostId(postId, (err, events) => {
-        if (err) {
-            console.error('Error in controller:', err);
-            res.status(500).json({ error: 'Error retrieving posts' });
-        } else {
-            res.status(200).json(events);
-        }
+async function streamToBuffer(readableStream) {
+    return new Promise((resolve, reject) => {
+        const chunks = [];
+        readableStream.on('data', (data) => {
+            chunks.push(data instanceof Buffer ? data : Buffer.from(data));
+        });
+        readableStream.on('end', () => {
+            resolve(Buffer.concat(chunks));
+        });
+        readableStream.on('error', reject);
     });
+}
+
+exports.getAllCommentsByPostId = async (req, res) => {
+    const postId = req.params.postId;
+    const postInstance = new Post();
+    const containerName = process.env.CONTAINERS_NAME;
+    const blobClient = postInstance.getBlobClient();
+    const containerClient = blobClient.getContainerClient(containerName);
+
+    try {
+        const comments = await postInstance.getAllCommentsByPostId(postId);
+        await Promise.all(comments.map(async (comment) => {
+            if (comment.image) {
+                const photoId = comment.image.toString();
+                const blobClient = containerClient.getBlobClient(photoId);
+                const downloadResponse = await blobClient.download();
+                const download = await streamToBuffer(downloadResponse.readableStreamBody);
+                comment.image = download.toString();
+                console.log('Downloaded blob content done');
+            }
+            return comment;
+        }));
+        res.status(201).json(comments);
+    } catch (err) {
+        console.error('Error in controller getAllCommentsByPostId:', err);
+        res.status(500).json({error: 'Error retrieving posts'});
+    };
 };
 
-exports.addComment = (req, res) => {
+exports.addComment = async (req, res) => {
     const postId = req.body.postId;
     const userId = req.body.userId;
     const text = req.body.text;
     const image = req.body.image || null;
 
-    Post.addComment(postId, userId, text, image, (err, newCommentId) => {
-        if (err) {
-            console.error('Error in controller:', err);
-            res.status(500).json({ error: 'Error adding comment', details: err.message });
-        } else {
-            res.status(200).json({ comment_id: newCommentId });
-        }
-    });
+    const postInstance = new Post();
+
+    try {
+        const newCommentId = await postInstance.addComment(postId, userId, text, image);
+        console.log("Well done");
+        res.status(201).json({newCommentId: newCommentId});
+    } catch (err) {
+        console.error('Error in controller:', err);
+        res.status(500).json({error: 'Error adding comment'});
+    };
 };
 
 exports.addPost = (req, res) => {

@@ -2,9 +2,10 @@ const User = require('../models/userModel');
 
 exports.createUser = async (req, res) => {
     const { name, surname, username, email, password } = req.body;
+    const userInstance = new User();
 
     try {
-        const userId = await User.createUser(name, surname, username, email, password);
+        const userId = await userInstance.createUser(name, surname, username, email, password);
         res.status(201).json({ user_id: userId });
     } catch (err) {
         console.error('Error in controller:', err);
@@ -14,9 +15,10 @@ exports.createUser = async (req, res) => {
 
 exports.getUserById = async (req, res) => {
     const userId = req.params.userId;
+    const userInstance = new User();
 
     try {
-        const user = await User.getUserById(userId);
+        const user = await userInstance.getUserById(userId);
         res.status(200).json(user);
     } catch (err) {
         console.error('Error in controller:', err);
@@ -25,8 +27,9 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.getAllUsers = async (req, res) => {
+    const userInstance = new User();
     try {
-        const users = await User.getAllUsers();
+        const users = await userInstance.getAllUsers();
         res.status(200).json(users);
     } catch (err) {
         console.error('Error in controller:', err);
@@ -36,9 +39,10 @@ exports.getAllUsers = async (req, res) => {
 
 exports.getUserByLoginAndPassword = async (req, res) => {
     const { username, password } = req.body;
+    const userInstance = new User();
 
     try {
-        const user = await User.getUserByLoginAndPassword(username, password);
+        const user = await userInstance.getUserByLoginAndPassword(username, password);
         if (!user) {
             res.status(401).json({ user_id: null });
         } else {
