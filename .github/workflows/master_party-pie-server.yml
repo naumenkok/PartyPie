@@ -63,6 +63,10 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
+
+      - name: Decrypt Certificate
+        run: |
+          openssl enc -d -aes-256-cbc -in ./serwer/src/DigiCertGlobalRootCA.crt.enc -out ./serwer/src/DigiCertGlobalRootCA.crt -k ${{ secrets.CERTIFICATE_PASSPHRASE }}
       
       - name: Login to Azure
         uses: azure/login@v1
