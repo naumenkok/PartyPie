@@ -37,6 +37,11 @@ jobs:
           echo CONTAINERS_NAME=${{ secrets.CONTAINERS_NAME }} >> .env
           cat .env
 
+      - name: Decrypt Certificate
+        working-directory: ./serwer/src
+        run: |
+          openssl enc -d -aes-256-cbc -in DigiCertGlobalRootCA.crt.enc -out DigiCertGlobalRootCA.crt -k ${{ secrets.CERTIFICATE_PASSPHRASE }}
+
       - name: Zip artifact for deployment
         run: zip release.zip ./serwer/* -r
 
@@ -64,10 +69,6 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
-      - name: Decrypt Certificate
-        run: |
-          openssl enc -d -aes-256-cbc -in ./serwer/src/DigiCertGlobalRootCA.crt.enc -out ./serwer/src/DigiCertGlobalRootCA.crt -k ${{ secrets.CERTIFICATE_PASSPHRASE }}
-      
       - name: Login to Azure
         uses: azure/login@v1
         with:
