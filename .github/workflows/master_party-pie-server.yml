@@ -40,7 +40,7 @@ jobs:
       - name: Decrypt Certificate
         working-directory: ./serwer/src
         run: |
-          openssl enc -d -aes-256-cbc -in DigiCertGlobalRootCA.crt.enc -out DigiCertGlobalRootCA.crt -k ${{ secrets.CERTIFICATE_PASSPHRASE }}
+          openssl enc -d -aes-256-cbc -in DigiCertGlobalRootCA.crt.enc -out DigiCertGlobalRootCA.crt.pem -k ${{ secrets.CERTIFICATE_PASSPHRASE }}
 
       - name: Zip artifact for deployment
         run: zip release.zip ./serwer/* -r
