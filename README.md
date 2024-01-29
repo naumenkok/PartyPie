@@ -1,0 +1,3 @@
+Mobile application whose main goal is the organisation of festive events. The important elements of this system are cross-platform compatibility and functional flexibility. The main goal of the system is to streamline the organisation of smaller events such as birthdays, weddings, or gatherings. The application offers a wide range of functionalities, such as creating event descriptions with all of the detailed information, including dress code or a wish list with gift ideas. Additionally, the application aims to enhance interaction with participants and facilitate easy photo uploads.
+
+The application was developed using hybrid technology, and its backend is hosted on a public cloud infrastructure.
