@@ -64,7 +64,7 @@ class Post {
                 const containerName = process.env.CONTAINERS_NAME;
                 if (!containerName) {
                     console.error('no container name storage string!');
-                    return; // Handle the lack of container name
+                    return;
                 }
 
                 const blobClient = this.getBlobClient();

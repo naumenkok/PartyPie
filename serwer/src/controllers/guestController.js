@@ -1,43 +1,42 @@
 const Guest = require('../models/guestModel');
 
-exports.getEventsByGuestId = (req, res) => {
+exports.getEventsByGuestId = async (req, res) => {
     const userId = req.params.userId;
+    const guestInstance = new Guest();
 
-    Guest.getEventsByGuestId(userId, (err, events) => {
-        if (err) {
-            console.error('Error in controller:', err);
-            res.status(500).json({ error: 'Error retrieving events' });
-        } else {
-            res.status(200).json(events);
-        }
-    });
+    try {
+        const events = await guestInstance.getEventsByGuestId(userId);
+        res.status(200).json(events);
+    } catch (err) {
+        console.error('Error in controller:', err);
+        res.status(500).json({ error: 'Error retrieving events' });
+    }
 };
 
-
-exports.getPastEventsByGuestId = (req, res) => {
+exports.getPastEventsByGuestId = async (req, res) => {
     const userId = req.params.userId;
+    const guestInstance = new Guest();
 
-    Guest.getPastEventsByGuestId(userId, (err, events) => {
-        if (err) {
-            console.error('Error in controller:', err);
-            res.status(500).json({ error: 'Error retrieving past events' });
-        } else {
-            res.status(200).json(events);
-        }
-    });
+    try {
+        const events = await guestInstance.getPastEventsByGuestId(userId);
+        res.status(200).json(events);
+    } catch (err) {
+        console.error('Error in controller:', err);
+        res.status(500).json({ error: 'Error retrieving past events' });
+    }
 };
 
-exports.getFutureEventsByGuestId = (req, res) => {
+exports.getFutureEventsByGuestId = async (req, res) => {
     const userId = req.params.userId;
+    const guestInstance = new Guest();
 
-    Guest.getFutureEventsByGuestId(userId, (err, events) => {
-        if (err) {
-            console.error('Error in controller:', err);
-            res.status(500).json({ error: 'Error retrieving future events' });
-        } else {
-            res.status(200).json(events);
-        }
-    });
+    try {
+        const events = await guestInstance.getFutureEventsByGuestId(userId);
+        res.status(200).json(events);
+    } catch (err) {
+        console.error('Error in controller:', err);
+        res.status(500).json({ error: 'Error retrieving future events' });
+    }
 };
 
 exports.addGuest = (req, res) => {
@@ -53,15 +52,15 @@ exports.addGuest = (req, res) => {
     });
 };
 
-exports.getGuestsByEventId = (req, res) => {
+exports.getGuestsByEventId = async (req, res) => {
     const eventId = req.params.eventId;
+    const guestInstance = new Guest();
 
-    Guest.getGuestsByEventId(eventId, (err, data) => {
-        if (err) {
-            console.error('Error in controller:', err);
-            res.status(500).json({ error: 'Error getting guests' });
-        } else {
-            res.status(200).json(data);
-        }
-    });
+    try {
+        const data = await guestInstance.getGuestsByEventId(eventId);
+        res.status(200).json(data);
+    } catch (err) {
+        console.error('Error in controller:', err);
+        res.status(500).json({ error: 'Error getting guests' });
+    }
 };

@@ -1,7 +1,12 @@
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config({ path: "./.env" });
 
+try {
+    console.log(process.cwd());
+    require('dotenv').config({ path: "./.env" });
+} catch (error) {
+    console.error('Error loading .env file:', error);
+}
 
 module.exports = {
     database: {

@@ -10,17 +10,6 @@ class Event {
         callback(err, null);
     }
 
-    // static getMyEventsByUserId(userId, callback) {
-    //     const query = "SELECT * FROM Events WHERE creator_id = ? ORDER BY date";
-    //     connection.query(query, [userId], (err, events) => {
-    //         if (err) {
-    //             this.handleQueryError(err, callback);
-    //         } else {
-    //             callback(null, events);
-    //         }
-    //     });
-    // }
-
     static getPastMyEventsByUserId(userId, callback) {
         const currentDate = new Date();
         const query = "SELECT * FROM Events WHERE creator_id = ? AND date < ? ORDER BY date";
@@ -78,15 +67,20 @@ class Event {
     }
 
     static getEventIdByEventCode(eventCode, callback) {
+        console.log("you are here");
+        console.log(eventCode);
         const query = "SELECT event_id FROM Events WHERE code = ?";
         connection.query(query, [eventCode], (err, eventId) => {
             if (err) {
                 this.handleQueryError(err, callback);
             } else {
+                console.log("you are here2", eventId);
                 callback(null, eventId);
             }
         });
     }
+
+
 
     static getLastEventId(callback) {
         const query = "SELECT MAX(event_id) AS last_event_id FROM Events";
@@ -192,6 +186,18 @@ class Event {
             }
         });
     }
+
+
+    // static getMyEventsByUserId(userId, callback) {
+    //     const query = "SELECT * FROM Events WHERE creator_id = ? ORDER BY date";
+    //     connection.query(query, [userId], (err, events) => {
+    //         if (err) {
+    //             this.handleQueryError(err, callback);
+    //         } else {
+    //             callback(null, events);
+    //         }
+    //     });
+    // }
 }
 
 module.exports = Event;

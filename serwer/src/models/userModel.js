@@ -27,7 +27,7 @@ class User {
     }
 
 
-     getUserById(userId) {
+    getUserById(userId) {
         return new Promise(async (resolve, reject) => {
             try {
                 const user = await this.query('SELECT * FROM Users WHERE user_id = ?', [userId]);
@@ -49,7 +49,7 @@ class User {
         }
     }
 
-     async getUserByLoginAndPassword(username, password) {
+    async getUserByLoginAndPassword(username, password) {
         try {
             const user = await this.query('SELECT user_id FROM Users WHERE username = ? AND password = ?', [username, password]);
             return user[0];

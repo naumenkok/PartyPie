@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.1.17:3000';
-// const BASE_URL = 'http://172.20.10.9:3000';
+// const BASE_URL = 'http://192.168.1.17:3000';
 
+const BASE_URL = 'https://party-pie-server.azurewebsites.net';
 export const getAllTasks = async (eventId) => {
     try {
         const response = await axios.get(
